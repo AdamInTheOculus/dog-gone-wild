@@ -45,6 +45,15 @@ void gameLoop(Game* game)
         {
             if(e.type == SDL_QUIT)
                 return;
+
+            else if(e.type == SDL_KEYUP)
+            {
+                switch(e.key.keysym.sym)
+                {
+                    case SDLK_ESCAPE:
+                        return; break;
+                }
+            }
         }
     }
 }

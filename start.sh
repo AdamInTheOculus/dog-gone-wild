@@ -8,4 +8,4 @@ make clean
 make game
 
 # Run game code
-./bin/game
+./bin/main
