@@ -5,81 +5,60 @@
  * @purpose Entry point for Dog Gone Wild
 **/
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <SDL2/SDL.h>
+#include "game.h"
 
-#define SCREEN_WIDTH 720
-#define SCREEN_HEIGHT 480
-
-int main(int argc, char* arv[])
+Game initializeGame(const int width, const int height)
 {
-    // Window that will be rendered to
-    SDL_Window* window = NULL;
-    SDL_Surface* screenSurface = NULL;
+    Game game;
+    game.width = width;
+    game.height = height;
 
-    // Attempt to initialize SDL
-    if(SDL_Init( SDL_INIT_VIDEO ) < 0)
+    if(SDL_Init(SDL_INIT_EVERYTHING))
     {
-        fprintf(stderr, "ERROR: SDL could not initialize!\n\tFile [%s] at line [%d]\n\t%s\n", __FILE__, __LINE__ - 1, SDL_GetError());
-        return -1;
+        log_error("Failed to initialize SDL. %s\n", SDL_GetError());
+        exit(-1);
     }
 
-    // Create application window with following specifications
-    // @annotate https://wiki.libsdl.org/SDL_CreateWindow
-    window = SDL_CreateWindow (
-        "Dog Gone Wild",            // Game title
-        SDL_WINDOWPOS_UNDEFINED,    //  
-        SDL_WINDOWPOS_UNDEFINED,    //
-        SCREEN_WIDTH,               // Width of window
-        SCREEN_HEIGHT,              // Height of window
-        SDL_WINDOW_SHOWN            // Show window when started
-    );
+    return game;
+}
 
-    // Ensure window was created successfully
-    if(window == NULL)
+void destroyGame(Game* game)
+{
+    if(game == NULL)
+        return;
+}
+
+void gameLoop(Game* game)
+{
+    if(game == NULL)
     {
-        fprintf(stderr, "ERROR: Could not create SDL window!\n\tFile [%s] at line [%d]\n\t%s\n", __FILE__, __LINE__ - 1, SDL_GetError());
-        return -1;
+        log_error("Game pointer is NULL. %s\n", SDL_GetError());
+        return;
     }
 
-    screenSurface = SDL_GetWindowSurface(window);
+    Graphics g = initializeGraphics(game->width, game->height);
+    SDL_Event e;
 
-    // Fill screen with black
-    // @annotate https://wiki.libsdl.org/SDL_FillRect
-    SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
-
-    // Update window surface
-    SDL_UpdateWindowSurface(window);
-
-    // Loop until user clicks EXIT or presses ESCAPE
-    bool isRunning = true;
-    while(isRunning)
+    while(true)
     {
-        SDL_Event e;
-        while(SDL_PollEvent(&e))
+        if(SDL_PollEvent(&e))
         {
-            switch(e.type)
-            {
-                case SDL_QUIT:
-                    isRunning = false;
-                    break;
-
-                case SDL_KEYUP:
-                    if(e.key.keysym.sym == SDLK_ESCAPE)
-                    {
-                        isRunning = false;
-                        break;
-                    }
-
-                default: ;
-
-            }
+            if(e.type == SDL_QUIT)
+                return;
         }
     }
+}
 
-    // Clean up
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-    return 0;
+void draw(Graphics* g)
+{
+    if(g == NULL)
+    {
+        log_error("Graphics pointer is NULL. %s\n", SDL_GetError());
+        return;
+    }
+}
+
+void update(float elapsedTime)
+{
+    return;
 }
