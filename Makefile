@@ -6,14 +6,15 @@ BIN = bin
 SRC = src/graphics.c src/game.c src/main.c
 
 # Cross platform include/library locations
-INCLUDES = -Iinclude -I/usr/local/include
-LINKS = -L/usr/local/lib
+INCLUDES = -Iinclude
+SDL_CFLAGS := $(shell sdl2-config --cflags)
+SDL_LDFLAGS := $(shell sdl2-config --libs)
 
 # Additional libs to include
 SDL_LIBS = -lSDL2
 
 game:
-	$(CC) $(C_FLAGS) $(INCLUDES) $(LINKS) $(SRC) $(SDL_LIBS) -o $(BIN)/main
+	$(CC) $(C_FLAGS) $(INCLUDES) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SRC) $(SDL_LIBS) -o $(BIN)/main
 
 clean:
 	rm -r bin/*
