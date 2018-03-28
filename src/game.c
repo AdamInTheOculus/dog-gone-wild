@@ -14,10 +14,7 @@ Game initializeGame(const int width, const int height)
     game.height = height;
 
     if(SDL_Init(SDL_INIT_EVERYTHING))
-    {
-        log_error("Failed to initialize SDL. %s\n", SDL_GetError());
-        exit(-1);
-    }
+        log_error_exit("Failed to initialize SDL. %s\n", SDL_GetError());
 
     return game;
 }
@@ -25,16 +22,13 @@ Game initializeGame(const int width, const int height)
 void destroyGame(Game* game)
 {
     if(game == NULL)
-        return;
+        log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
 }
 
 void loop(Game* game)
 {
     if(game == NULL)
-    {
-        log_error("Game pointer is NULL. %s\n", SDL_GetError());
-        return;
-    }
+        log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
 
     Graphics g = initializeGraphics(game->width, game->height);
     SDL_Event e;
@@ -61,10 +55,7 @@ void loop(Game* game)
 void draw(Graphics* g)
 {
     if(g == NULL)
-    {
-        log_error("Graphics pointer is NULL. %s\n", SDL_GetError());
-        return;
-    }
+        log_error_exit("Graphics pointer is NULL. %s\n", SDL_GetError());
 }
 
 void update(float elapsedTime)

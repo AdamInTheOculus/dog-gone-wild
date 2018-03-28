@@ -8,10 +8,12 @@
 
 #define DEBUG 1
 #ifdef DEBUG
-#define log_error(fmt, ...) \
-            fprintf(stderr, "ERROR ==> %s:%d %s() ==> " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__);
+#define log_error_exit(fmt, ...) {\
+            fprintf(stderr, "ERROR ==> %s:%d %s() ==> " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__);\
+            exit(-1);\
+        }
 #else
-#define log_error(str, ...)
+#define log_error_exit(str, ...)
 #endif
 
 typedef struct Graphics {
