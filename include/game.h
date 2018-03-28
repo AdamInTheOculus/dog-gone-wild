@@ -12,7 +12,7 @@ typedef struct Game {
 
 Game initializeGame();
 void destroyGame(Game* game);
-void gameLoop(Game* game);
+void loop(Game* game);
 void draw(Graphics* g);
 void update(float elapsedTime);
 

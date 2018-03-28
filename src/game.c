@@ -28,7 +28,7 @@ void destroyGame(Game* game)
         return;
 }
 
-void gameLoop(Game* game)
+void loop(Game* game)
 {
     if(game == NULL)
     {
