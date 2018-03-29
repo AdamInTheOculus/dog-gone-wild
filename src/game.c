@@ -19,6 +19,9 @@ Game initializeGame(const int width, const int height)
     Graphics g = initializeGraphics(game.width, game.height);
     Input input = initializeInput();
     loop(&input);
+
+    destroyInput(&input);
+    destroyGraphics(&g);
     return game;
 }
 
