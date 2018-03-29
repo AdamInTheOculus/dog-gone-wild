@@ -26,7 +26,7 @@ Graphics initializeGraphics(const int width, const int height)
     return g;
 }
 
-void deleteGraphics(Graphics* g)
+void destroyGraphics(Graphics* g)
 {
     SDL_DestroyWindow(g->window);
     return;

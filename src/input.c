@@ -19,7 +19,7 @@ Input initializeInput()
     return i;
 }
 
-void deleteInput(Input* input)
+void destroyInput(Input* input)
 {
     if(input == NULL)
         log_error_exit("`input` pointer [%p] is NULL.\n", input);

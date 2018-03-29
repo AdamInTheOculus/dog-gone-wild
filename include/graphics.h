@@ -31,6 +31,6 @@ typedef struct Graphics {
 } Graphics;
 
 Graphics initializeGraphics(const int width, const int height);
-void deleteGraphics(Graphics* g);
+void destroyGraphics(Graphics* g);
 
 #endif

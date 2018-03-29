@@ -32,7 +32,7 @@ typedef struct Input {
 } Input;
 
 Input initializeInput();
-void deleteInput(Input* input);
+void destroyInput(Input* input);
 
 void clearInput(Input* input); 
 void keyUpEvent(Input* input, SDL_Event e);
