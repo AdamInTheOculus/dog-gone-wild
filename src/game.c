@@ -53,6 +53,9 @@ void loop(Input* input)
                     keyDownEvent(input, e);
             }
         }
+
+        if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE))
+            return;
     }
 }
 
