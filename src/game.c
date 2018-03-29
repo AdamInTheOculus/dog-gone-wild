@@ -16,6 +16,9 @@ Game initializeGame(const int width, const int height)
     if(SDL_Init(SDL_INIT_EVERYTHING))
         log_error_exit("Failed to initialize SDL. %s\n", SDL_GetError());
 
+    Graphics g = initializeGraphics(game.width, game.height);
+    Input input = initializeInput();
+    loop(&input);
     return game;
 }
 
@@ -25,12 +28,13 @@ void destroyGame(Game* game)
         log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
 }
 
-void loop(Game* game)
+void loop(Input* input)
 {
-    if(game == NULL)
-        log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
+    if(input == NULL)
+        log_error_exit("Input is NULL. %s\n", SDL_GetError());
 
-    Graphics g = initializeGraphics(game->width, game->height);
+    clearInput(input);
+
     SDL_Event e;
 
     while(true)
@@ -41,12 +45,12 @@ void loop(Game* game)
                 return;
 
             else if(e.type == SDL_KEYUP)
+                keyUpEvent(input, e);
+
+            else if(e.type == SDL_KEYDOWN)
             {
-                switch(e.key.keysym.sym)
-                {
-                    case SDLK_ESCAPE:
-                        return; break;
-                }
+                if(e.key.repeat == 0)
+                    keyDownEvent(input, e);
             }
         }
     }

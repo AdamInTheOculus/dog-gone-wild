@@ -6,8 +6,6 @@
 int main(int argc, char* arv[])
 {
     Game game = initializeGame(WIDTH, HEIGHT);
-    loop(&game);
     destroyGame(&game);
-
     return 0;
 }

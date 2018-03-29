@@ -3,7 +3,7 @@
 CC = gcc
 C_FLAGS = -Wall -std=c11 -g
 BIN = bin
-SRC = src/graphics.c src/game.c src/main.c
+SRC = src/*
 
 # Cross platform include/library locations
 INCLUDES = -Iinclude

@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "graphics.h"
+#include "input.h"
 
 typedef struct Game {
 
@@ -12,7 +13,7 @@ typedef struct Game {
 
 Game initializeGame();
 void destroyGame(Game* game);
-void loop(Game* game);
+void loop(Input* input);
 void draw(Graphics* g);
 void update(float elapsedTime);
 
