@@ -27,7 +27,7 @@ else
 #--------------------------------#
 	# -w suppresses warnings
 	# -W1,-subsystem,windows gets rid of console window 
-	COMPILER_FLAGS = -w -Wl,-subsystem,windows
+	COMPILER_FLAGS = -w
 	SRC = src\input.c src\graphics.c src\game.c src\main.c
 	SDL_CFLAGS = -IC:\mingw32-dev\include
 	SDL_LDFLAGS = -LC:\mingw32-dev\lib
