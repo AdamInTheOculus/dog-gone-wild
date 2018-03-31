@@ -4,6 +4,10 @@
 #include "graphics.h"
 #include "input.h"
 
+#define FPS 50
+#define MAX_FRAME_TIME (5 * 1000) / FPS
+#define MIN(a, b) (((a) > (b)) ? (b) : (a))
+
 typedef struct Game {
 
     int width;

@@ -34,6 +34,7 @@ typedef struct Input {
 Input initializeInput();
 void destroyInput(Input* input);
 
+void updateInput(Input* input);
 void clearInput(Input* input); 
 void keyUpEvent(Input* input, SDL_Event e);
 void keyDownEvent(Input* input, SDL_Event e);

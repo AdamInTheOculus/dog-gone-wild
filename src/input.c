@@ -29,12 +29,30 @@ void destroyInput(Input* input)
     return;
 }
 
+void updateInput(Input* input)
+{
+    SDL_Event e;
+    if(SDL_PollEvent(&e))
+    {
+        if(e.type == SDL_QUIT)
+            return;
+
+        else if(e.type == SDL_KEYUP)
+            keyUpEvent(input, e);
+
+        else if(e.type == SDL_KEYDOWN)
+        {
+            if(e.key.repeat == 0)
+                keyDownEvent(input, e);
+        }
+    }
+}
+
 void clearInput(Input* input)
 {
     if(input == NULL)
         log_error_exit("`input` pointer [%p] is NULL.\n", input);
 
-    log_debug("Clearing input of size [%d].\n", input->size);
     for(int i=0; i<input->size; i++)
         for(int j=0; j<KEY_STATE_COUNT; j++)
             input->keycode[i][j] = false;
