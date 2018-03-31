@@ -5,7 +5,7 @@
 make clean
 
 # Recompile existing code
-make game
+make
 
 # Run game code
 ./bin/main
