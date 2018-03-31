@@ -39,11 +39,11 @@ all:
 	$(CC) $(C_FLAGS) $(SRC) $(INCLUDES) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(COMPILER_FLAGS) $(SDL_LIBS) -o $(BIN)\main
 	
 clean:
-	rm .\bin\main.exe
+	del bin\main.exe
 else
 all:
 	$(CC) $(C_FLAGS) $(SRC) $(INCLUDES) $(SDL_CFLAGS) $(SDL_LDFLAGS) -o $(BIN)/main
 	
 clean:
-	rm bin/*
+	rm -r bin/*
 endif
