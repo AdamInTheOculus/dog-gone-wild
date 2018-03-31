@@ -13,6 +13,8 @@ Game initializeGame(const int width, const int height)
     game.width = width;
     game.height = height;
 
+    printf("Windows test!\n");
+
     if(SDL_Init(SDL_INIT_EVERYTHING))
     {
         log_error("Failed to initialize SDL. %s\n", SDL_GetError());
