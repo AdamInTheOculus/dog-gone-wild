@@ -16,9 +16,8 @@ BIN = bin
 # Cross platform include/library locations
 INCLUDES = -Iinclude
 ifneq ($(OS), Windows_NT)
-	SRC = src\graphics. src\game.c src\main.c
-	
-	SDL_LIBS = -lSDL2
+	SRC = src/input.c src/graphics.c src/game.c src/main.c
+
 	SDL_CFLAGS := $(shell sdl2-config --cflags)
 	SDL_LDFLAGS := $(shell sdl2-config --libs)
 else
@@ -29,7 +28,7 @@ else
 	# -w suppresses warnings
 	# -W1,-subsystem,windows gets rid of console window 
 	COMPILER_FLAGS = -w -Wl,-subsystem,windows
-	SRC = src/graphics.c src/game.c src/main.c
+	SRC = src\input.c src\graphics.c src\game.c src\main.c
 	SDL_CFLAGS = -IC:\mingw32-dev\include
 	SDL_LDFLAGS = -LC:\mingw32-dev\lib
 	SDL_LIBS = -lmingw32 -lSDL2main -lSDL2
@@ -43,7 +42,7 @@ clean:
 	rm -r bin\*
 else
 all:
-	$(CC) $(C_FLAGS) $(SRC) $(INCLUDES) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_LIBS) -o $(BIN)/main
+	$(CC) $(C_FLAGS) $(SRC) $(INCLUDES) $(SDL_CFLAGS) $(SDL_LDFLAGS) -o $(BIN)/main
 	
 clean:
 	rm -r bin/*
