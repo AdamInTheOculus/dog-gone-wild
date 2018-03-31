@@ -20,16 +20,13 @@ Graphics initializeGraphics(const int width, const int height)
     );
 
     if(errorCode)
-    {
-        log_error("%s\n", SDL_GetError());
-        exit(-1);
-    }
+        log_error_exit("%s\n", SDL_GetError());
 
     SDL_SetWindowTitle(g.window, "Dogs Gone Wild");
     return g;
 }
 
-void deleteGraphics(Graphics* g)
+void destroyGraphics(Graphics* g)
 {
     SDL_DestroyWindow(g->window);
     return;

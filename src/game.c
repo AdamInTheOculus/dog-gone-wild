@@ -16,29 +16,30 @@ Game initializeGame(const int width, const int height)
     printf("Windows test!\n");
 
     if(SDL_Init(SDL_INIT_EVERYTHING))
-    {
-        log_error("Failed to initialize SDL. %s\n", SDL_GetError());
-        exit(-1);
-    }
+        log_error_exit("Failed to initialize SDL. %s\n", SDL_GetError());
 
+    Graphics g = initializeGraphics(game.width, game.height);
+    Input input = initializeInput();
+    loop(&input);
+
+    destroyInput(&input);
+    destroyGraphics(&g);
     return game;
 }
 
 void destroyGame(Game* game)
 {
     if(game == NULL)
-        return;
+        log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
 }
 
-void gameLoop(Game* game)
+void loop(Input* input)
 {
-    if(game == NULL)
-    {
-        log_error("Game pointer is NULL. %s\n", SDL_GetError());
-        return;
-    }
+    if(input == NULL)
+        log_error_exit("Input is NULL. %s\n", SDL_GetError());
 
-    Graphics g = initializeGraphics(game->width, game->height);
+    clearInput(input);
+
     SDL_Event e;
 
     while(true)
@@ -49,24 +50,24 @@ void gameLoop(Game* game)
                 return;
 
             else if(e.type == SDL_KEYUP)
+                keyUpEvent(input, e);
+
+            else if(e.type == SDL_KEYDOWN)
             {
-                switch(e.key.keysym.sym)
-                {
-                    case SDLK_ESCAPE:
-                        return; break;
-                }
+                if(e.key.repeat == 0)
+                    keyDownEvent(input, e);
             }
         }
+
+        if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE))
+            return;
     }
 }
 
 void draw(Graphics* g)
 {
     if(g == NULL)
-    {
-        log_error("Graphics pointer is NULL. %s\n", SDL_GetError());
-        return;
-    }
+        log_error_exit("Graphics pointer is NULL. %s\n", SDL_GetError());
 }
 
 void update(float elapsedTime)
