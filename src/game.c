@@ -7,7 +7,7 @@
 
 #include "game.h"
 
-Game initializeGame(const int width, const int height)
+Game initializeGame(int width, int height)
 {
     Game game;
     game.width = width;
