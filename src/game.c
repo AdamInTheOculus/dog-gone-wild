@@ -7,7 +7,7 @@
 
 #include "game.h"
 
-Game initializeGame(const int width, const int height)
+Game initializeGame(int width, int height)
 {
     Game game;
     game.width = width;
@@ -19,7 +19,7 @@ Game initializeGame(const int width, const int height)
     Graphics g = initializeGraphics(game.width, game.height);
     Input input = initializeInput();
 
-    loop(&input);
+    loop(&input, &g);
 
     destroyInput(&input);
     destroyGraphics(&g);
@@ -32,7 +32,7 @@ void destroyGame(Game* game)
         log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
 }
 
-void loop(Input* input)
+void loop(Input* input, Graphics* graphics)
 {
     if(input == NULL)
         log_error_exit("Input is NULL. %s\n", SDL_GetError());
@@ -54,6 +54,7 @@ void loop(Input* input)
         int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
 
         update(MIN(ELAPSED_TIME_MS, MAX_FRAME_TIME));
+        draw(graphics);
         LAST_UPDATE_TIME = ELAPSED_TIME_MS;
     }
 }

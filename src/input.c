@@ -63,14 +63,14 @@ void clearInput(Input* input)
  
 void keyUpEvent(Input* input, SDL_Event e)
 {
-    log_debug("Registered keyUpEvent for: %d\n", e.key.keysym.scancode);
+    log("Registered keyUpEvent for: %d\n", e.key.keysym.scancode);
     input->keycode[RELEASED_KEY][e.key.keysym.scancode] = true;
     input->keycode[HELD_KEY][e.key.keysym.scancode] = false;
 }
 
 void keyDownEvent(Input* input, SDL_Event e)
 {
-    log_debug("Registered keyDownEvent for: %d\n", e.key.keysym.scancode);
+    log("Registered keyDownEvent for: %d\n", e.key.keysym.scancode);
     input->keycode[PRESSED_KEY][e.key.keysym.scancode] = true;
     input->keycode[HELD_KEY][e.key.keysym.scancode] = true;
 }

@@ -30,7 +30,18 @@ typedef struct Graphics {
     int height;
 } Graphics;
 
-Graphics initializeGraphics(const int width, const int height);
+Graphics initializeGraphics(int width, int height);
 void destroyGraphics(Graphics* g);
+
+// ======================
+// ==  Image Handling  ==
+// ======================
+
+/** SDL_Surface* loadImage
+ * @purpose Loads image into spritesheet, if it doesn't already exist.
+ * @param `file` Relative path to image file.
+ * @return 
+**/
+SDL_Surface* loadImage(const char* file);
 
 #endif

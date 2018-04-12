@@ -9,10 +9,11 @@ C_FLAGS = -Wall -g
 BIN = bin
 
 # Cross platform include/library locations
-INCLUDES = -Iinclude
+INCLUDES = -Iinclude -Iinclude/adt
 ifneq ($(OS), Windows_NT)
 	C_FLAGS += -std=c11
 	SRC = src/input.c src/graphics.c src/game.c src/main.c
+	SRC += src/adt/hashtable.c
 	SDL_CFLAGS := $(shell sdl2-config --cflags)
 	SDL_LDFLAGS := $(shell sdl2-config --libs)
 else
@@ -24,6 +25,7 @@ else
 	# -W1,-subsystem,windows gets rid of console window 
 	COMPILER_FLAGS = -w
 	SRC = src\input.c src\graphics.c src\game.c src\main.c
+	SRC += src\adt\hashtable.c
 	SDL_CFLAGS = -IC:\mingw32-dev\include
 	SDL_LDFLAGS = -LC:\mingw32-dev\lib
 	SDL_LIBS = -lmingw32 -lSDL2main -lSDL2

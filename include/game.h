@@ -17,7 +17,7 @@ typedef struct Game {
 
 Game initializeGame();
 void destroyGame(Game* game);
-void loop(Input* input);
+void loop(Input* input, Graphics* graphics);
 void draw(Graphics* g);
 void update(float elapsedTime);
 

@@ -17,9 +17,14 @@
             fprintf(stderr, "DEBUG ==> %s:%d %s() ==> " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__);\
         }
 
+#define log(fmt, ...) { \
+        	fprintf(stdout, "" fmt, __VA_ARGS__);\
+        }
+
 #else
 #define log_error_exit(str, ...)
 #define log_debug(str, ...)
+#define log(str, ...)
 #endif
 
 #define PRESSED_KEY 0
