@@ -29,6 +29,7 @@
 typedef struct Input {
     bool (*keycode)[3];
     int size;
+    bool exitRequested;
 } Input;
 
 Input initializeInput();
@@ -41,6 +42,7 @@ void keyDownEvent(Input* input, SDL_Event e);
 
 bool wasKeyPressed(const Input* input, SDL_Scancode key);
 bool wasKeyReleased(const Input* input, SDL_Scancode key);
+bool wasExitRequested(const Input* input);
 bool isKeyHeld(const Input* input, SDL_Scancode key);
 
 #endif

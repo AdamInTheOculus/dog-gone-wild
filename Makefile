@@ -6,18 +6,13 @@ CC = gcc
 # Different OS use different flags
 C_FLAGS = -Wall -g
 
-# Don't include C11 standard on Windows (todo: figure out why?)
-ifneq ($(OS), Windows_NT)
-	C_FLAGS += -std=c11
-endif
-
 BIN = bin
 
 # Cross platform include/library locations
 INCLUDES = -Iinclude
 ifneq ($(OS), Windows_NT)
+	C_FLAGS += -std=c11
 	SRC = src/input.c src/graphics.c src/game.c src/main.c
-
 	SDL_CFLAGS := $(shell sdl2-config --cflags)
 	SDL_LDFLAGS := $(shell sdl2-config --libs)
 else

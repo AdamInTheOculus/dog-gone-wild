@@ -13,11 +13,6 @@ Game initializeGame(const int width, const int height)
     game.width = width;
     game.height = height;
 
-    // Initialize all components for the game
-    //
-    // 1. SDL
-    // 2. Graphics
-    // 3. Input
     if(SDL_Init(SDL_INIT_EVERYTHING))
         log_error_exit("Failed to initialize SDL. %s\n", SDL_GetError());
 
@@ -50,8 +45,8 @@ void loop(Input* input)
         clearInput(input);
         updateInput(input);
 
-        // Quit application if ESCAPE key was pressed
-        if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE))
+        // Quit application if ESCAPE key or X is pressed
+        if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE) || wasExitRequested(input))
             return;
 
         // Calculate frame length
@@ -71,6 +66,5 @@ void draw(Graphics* g)
 
 void update(float elapsedTime)
 {
-    log_debug("Elapsed time: %.2f\n", elapsedTime);
     return;
 }
