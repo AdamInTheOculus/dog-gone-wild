@@ -46,6 +46,11 @@ else
 all:
 	$(CC) $(C_FLAGS) $(SRC) $(INCLUDES) $(SDL_CFLAGS) $(SDL_LDFLAGS) -o $(BIN)/main
 	
+# Optional rule for testing HashTable
+# Ensure hashtable.c has an `int main()` function
+hash:
+	$(CC) $(C_FLAGS) $(INCLUDES) src/adt/hashtable.c -o $(BIN)/hash
+
 clean:
 	rm -r bin/*
 endif

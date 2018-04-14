@@ -27,6 +27,12 @@ typedef struct HashTable {
 
 HashTable initializeHashTable(int size, void (*deleteFunction)(void* data));
 void deleteHashTable(HashTable* table);
-int hashKey(char* string);
+
+/** 
+ *
+ * @param string Represents some form of information label. 
+ * @return A number representing the index of a table.
+**/
+unsigned int hash(char* string, unsigned int size);
 
 #endif
