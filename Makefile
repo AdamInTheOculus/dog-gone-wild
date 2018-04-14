@@ -13,7 +13,7 @@ INCLUDES = -Iinclude -Iinclude/adt
 ifneq ($(OS), Windows_NT)
 	C_FLAGS += -std=c11
 	SRC = src/input.c src/graphics.c src/game.c src/main.c
-	SRC += src/adt/hashtable.c
+	SRC += src/adt/HashTableAPI.c src/adt/LinkedListAPI.c
 	SDL_CFLAGS := $(shell sdl2-config --cflags)
 	SDL_LDFLAGS := $(shell sdl2-config --libs)
 else
@@ -25,7 +25,7 @@ else
 	# -W1,-subsystem,windows gets rid of console window 
 	COMPILER_FLAGS = -w
 	SRC = src\input.c src\graphics.c src\game.c src\main.c
-	SRC += src\adt\hashtable.c
+	SRC += src\adt\HashTableAPI.c src\adt\LinkedListAPI.c
 	SDL_CFLAGS = -IC:\mingw32-dev\include
 	SDL_LDFLAGS = -LC:\mingw32-dev\lib
 	SDL_LIBS = -lmingw32 -lSDL2main -lSDL2
@@ -39,6 +39,7 @@ clean:
 	del bin\main.exe
 else
 all:
+	clear
 	$(CC) $(C_FLAGS) $(SRC) $(INCLUDES) $(SDL_CFLAGS) $(SDL_LDFLAGS) -o $(BIN)/main
 	
 # Optional rule for testing HashTable

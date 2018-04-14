@@ -7,9 +7,13 @@
 
 #include "graphics.h"
 
+#define IMAGE_COUNT 50
+
 Graphics initializeGraphics(const int width, const int height)
 {
     Graphics g;
+    g.width = width;
+    g.height = height;
 
     int errorCode = SDL_CreateWindowAndRenderer(
         width, 

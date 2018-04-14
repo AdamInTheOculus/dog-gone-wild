@@ -16,13 +16,9 @@ Game initializeGame(int width, int height)
     if(SDL_Init(SDL_INIT_EVERYTHING))
         log_error_exit("Failed to initialize SDL. %s\n", SDL_GetError());
 
-    Graphics g = initializeGraphics(game.width, game.height);
-    Input input = initializeInput();
+    game.graphics = initializeGraphics(game.width, game.height);
+    game.input = initializeInput();
 
-    loop(&input, &g);
-
-    destroyInput(&input);
-    destroyGraphics(&g);
     return game;
 }
 
@@ -30,6 +26,15 @@ void destroyGame(Game* game)
 {
     if(game == NULL)
         log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
+
+    destroyInput(&game->input);
+    destroyGraphics(&game->graphics);
+    SDL_Quit();
+}
+
+void runGame(Game* game)
+{
+    loop(&game->input, &game->graphics);
 }
 
 void loop(Input* input, Graphics* graphics)

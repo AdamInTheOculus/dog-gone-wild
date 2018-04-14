@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <SDL2/SDL.h>
+#include "HashTableAPI.h"
 
 #define DEBUG 1
 #ifdef DEBUG
@@ -24,10 +25,11 @@
 #endif
 
 typedef struct Graphics {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
     int width;
     int height;
+    SDL_Window* window;
+    SDL_Renderer* renderer;
+    HashTable ImageManager;
 } Graphics;
 
 Graphics initializeGraphics(int width, int height);

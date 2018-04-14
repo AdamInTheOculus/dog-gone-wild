@@ -12,11 +12,14 @@ typedef struct Game {
 
     int width;
     int height;
+    Graphics graphics;
+    Input input;
     
 } Game;
 
 Game initializeGame();
 void destroyGame(Game* game);
+void runGame(Game* game);
 void loop(Input* input, Graphics* graphics);
 void draw(Graphics* g);
 void update(float elapsedTime);
