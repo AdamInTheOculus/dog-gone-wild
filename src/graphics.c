@@ -22,7 +22,7 @@ Graphics initializeGraphics(const int width, const int height)
     if(errorCode)
         log_error_exit("%s\n", SDL_GetError());
 
-    SDL_SetWindowTitle(g.window, "Dogs Gone Wild");
+    SDL_SetWindowTitle(g.window, "Dog Gone Wild");
     return g;
 }
 

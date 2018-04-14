@@ -13,18 +13,13 @@ Game initializeGame(int width, int height)
     game.width = width;
     game.height = height;
 
-    // Initialize all components for the game
-    //
-    // 1. SDL
-    // 2. Graphics
-    // 3. Input
     if(SDL_Init(SDL_INIT_EVERYTHING))
         log_error_exit("Failed to initialize SDL. %s\n", SDL_GetError());
 
     Graphics g = initializeGraphics(game.width, game.height);
     Input input = initializeInput();
 
-    loop(&input);
+    loop(&input, &g);
 
     destroyInput(&input);
     destroyGraphics(&g);
@@ -37,7 +32,7 @@ void destroyGame(Game* game)
         log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
 }
 
-void loop(Input* input)
+void loop(Input* input, Graphics* graphics)
 {
     if(input == NULL)
         log_error_exit("Input is NULL. %s\n", SDL_GetError());
@@ -50,8 +45,8 @@ void loop(Input* input)
         clearInput(input);
         updateInput(input);
 
-        // Quit application if ESCAPE key was pressed
-        if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE))
+        // Quit application if ESCAPE key or X is pressed
+        if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE) || wasExitRequested(input))
             return;
 
         // Calculate frame length
@@ -59,6 +54,7 @@ void loop(Input* input)
         int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
 
         update(MIN(ELAPSED_TIME_MS, MAX_FRAME_TIME));
+        draw(graphics);
         LAST_UPDATE_TIME = ELAPSED_TIME_MS;
     }
 }
@@ -71,6 +67,5 @@ void draw(Graphics* g)
 
 void update(float elapsedTime)
 {
-    log_debug("Elapsed time: %.2f\n", elapsedTime);
     return;
 }

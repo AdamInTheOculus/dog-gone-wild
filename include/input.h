@@ -17,9 +17,14 @@
             fprintf(stderr, "DEBUG ==> %s:%d %s() ==> " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__);\
         }
 
+#define log(fmt, ...) { \
+        	fprintf(stdout, "" fmt, __VA_ARGS__);\
+        }
+
 #else
 #define log_error_exit(str, ...)
 #define log_debug(str, ...)
+#define log(str, ...)
 #endif
 
 #define PRESSED_KEY 0
@@ -29,6 +34,7 @@
 typedef struct Input {
     bool (*keycode)[3];
     int size;
+    bool exitRequested;
 } Input;
 
 Input initializeInput();
@@ -41,6 +47,7 @@ void keyDownEvent(Input* input, SDL_Event e);
 
 bool wasKeyPressed(const Input* input, SDL_Scancode key);
 bool wasKeyReleased(const Input* input, SDL_Scancode key);
+bool wasExitRequested(const Input* input);
 bool isKeyHeld(const Input* input, SDL_Scancode key);
 
 #endif

@@ -15,6 +15,7 @@ Input initializeInput()
     Input i;
     i.keycode = malloc(sizeof(bool*) * KEY_COUNT);
     i.size = KEY_COUNT;
+    i.exitRequested = false;
     clearInput(&i);
     return i;
 }
@@ -35,7 +36,7 @@ void updateInput(Input* input)
     if(SDL_PollEvent(&e))
     {
         if(e.type == SDL_QUIT)
-            return;
+            input->exitRequested = true;
 
         else if(e.type == SDL_KEYUP)
             keyUpEvent(input, e);
@@ -62,14 +63,14 @@ void clearInput(Input* input)
  
 void keyUpEvent(Input* input, SDL_Event e)
 {
-    log_debug("Registered keyUpEvent for: %d\n", e.key.keysym.scancode);
+    log("Registered keyUpEvent for: %d\n", e.key.keysym.scancode);
     input->keycode[RELEASED_KEY][e.key.keysym.scancode] = true;
     input->keycode[HELD_KEY][e.key.keysym.scancode] = false;
 }
 
 void keyDownEvent(Input* input, SDL_Event e)
 {
-    log_debug("Registered keyDownEvent for: %d\n", e.key.keysym.scancode);
+    log("Registered keyDownEvent for: %d\n", e.key.keysym.scancode);
     input->keycode[PRESSED_KEY][e.key.keysym.scancode] = true;
     input->keycode[HELD_KEY][e.key.keysym.scancode] = true;
 }
@@ -82,6 +83,11 @@ bool wasKeyPressed(const Input* input, SDL_Scancode key)
 bool wasKeyReleased(const Input* input, SDL_Scancode key)
 {
     return input->keycode[RELEASED_KEY][key];
+}
+
+bool wasExitRequested(const Input* input)
+{
+    return input->exitRequested;
 }
 
 bool isKeyHeld(const Input* input, SDL_Scancode key)
