@@ -1,1 +1,2 @@
-# I needed an empty file in the bin/ directory.
+.DS_Store
+bin/

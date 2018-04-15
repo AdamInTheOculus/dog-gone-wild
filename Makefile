@@ -34,9 +34,12 @@ endif
 ifeq ($(OS), Windows_NT)
 all:
 	$(CC) $(C_FLAGS) $(SRC) $(INCLUDES) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(COMPILER_FLAGS) $(SDL_LIBS) -o $(BIN)\main
+
+hash:
+	$(CC) $(C_FLAGS) $(INCLUDES) src\adt\LinkedListAPI.c src\adt\HashTableAPI.c src\test\hashtest.c -o $(BIN)\hash
 	
 clean:
-	del bin\main.exe
+	del bin\main.exe bin\hash.exe
 else
 all:
 	clear
