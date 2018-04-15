@@ -21,7 +21,7 @@ if [ "$(uname)" = "Linux" ]; then
     clear
     echo "Successfully installed all required software."
 
-elif [ "$(uname)" = "Darwin"* ]; then
+elif [ "$(uname)" = "Darwin" ]; then
 
     echo "MacOS system."
     echo "Installing SDL2 onto computer ..."
