@@ -23,21 +23,10 @@ if [ "$(uname)" = "Linux" ]; then
 
 elif [ "$(uname)" = "Darwin"* ]; then
 
+    clear
     echo "MacOS system."
     echo "Installing SDL2 onto computer ..."
-    brew install libsdl2-2.0
-    clear
-    echo "Installing SDL2 development tools onto computer ..."
-    brew install libsdl2-dev
-    clear
-    echo "Installing SDL2 image tools onto computer ..."
-    brew install libsdl2-image-dev
-    clear
-    echo "Installing SDL2 True Type Font tools onto computer ..."
-    brew install libsdl2-ttf-dev
-    clear
-    echo "Installing SDL2 mixer tools onto computer ..."
-    brew install libsdl2-mixer-dev
+    brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
     clear
     echo "Successfully installed all required software."
 
