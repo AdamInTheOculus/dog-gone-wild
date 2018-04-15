@@ -16,6 +16,7 @@ ifneq ($(OS), Windows_NT)
 	SRC += src/adt/HashTableAPI.c src/adt/LinkedListAPI.c
 	SDL_CFLAGS := $(shell sdl2-config --cflags)
 	SDL_LDFLAGS := $(shell sdl2-config --libs)
+	SDL_LIBS = -lSDL2_image -lSDL2_ttf
 else
 
 #--------------------------------#
@@ -28,7 +29,7 @@ else
 	SRC += src\adt\HashTableAPI.c src\adt\LinkedListAPI.c
 	SDL_CFLAGS = -Iwindows\mingw32-dev\include
 	SDL_LDFLAGS = -Lwindows\mingw32-dev\lib
-	SDL_LIBS = -lmingw32 -lSDL2main -lSDL2
+	SDL_LIBS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 endif
 
 ifeq ($(OS), Windows_NT)
@@ -43,7 +44,7 @@ clean:
 else
 all:
 	clear
-	$(CC) $(C_FLAGS) $(SRC) $(INCLUDES) $(SDL_CFLAGS) $(SDL_LDFLAGS) -o $(BIN)/main
+	$(CC) $(C_FLAGS) $(SRC) $(INCLUDES) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_LIBS) -o $(BIN)/main
 	
 # Optional rule for testing HashTable
 # Ensure hashtable.c has an `int main()` function
