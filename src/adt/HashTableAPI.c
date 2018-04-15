@@ -6,6 +6,7 @@
 **/
 
 #include "HashTableAPI.h"
+#include "debug.h"
 
 /** 
  * Implement FNV-1a hash algorithm
@@ -24,15 +25,19 @@ HashTable initializeHashTable(int size, char* (*printFunction)(void* toBePrinted
         log_error_exit("HashTable with size [%d] has NULL function pointer.", size);
 
     HashTable ht;
-    ht.size = size;
+    ht.maxSize = size;
+    ht.currentSize = 0;
 
     // Allocate space for the array of entries
-    if((ht.entries = calloc((size_t)ht.size, sizeof(Entry))) == NULL)
-        log_error_exit("Initializing hash table of size [%d] failed due to malloc error.", size);
+    if((ht.entries = calloc((size_t)ht.maxSize, sizeof(Entry))) == NULL)
+        log_error_exit("Allocating hash table of size [%d] failed.", size);
 
     // For each entry, initialize the chain
-    for(int i=0; i<ht.size; i++)
+    for(int i=0; i<ht.maxSize; i++)
+    {
         ht.entries[i].chain = initializeList(printFunction, deleteFunction, compareFunction);
+        //log_debug("List address: %p\n", &ht.entries[i].chain);
+    }
 
     return ht;
 }
@@ -42,7 +47,7 @@ void deleteHashTable(HashTable* ht)
     if(ht == NULL)
         return;
 
-    for(int i=0; i<ht->size; i++)
+    for(int i=0; i<ht->maxSize; i++)
     {
         Entry* entry = NULL;
         entry = &ht->entries[i];
@@ -55,6 +60,57 @@ void deleteHashTable(HashTable* ht)
     }
 
     free(ht->entries);
+}
+
+void insertEntry(HashTable* ht, char* key, void* data)
+{
+    if(ht == NULL || ht->maxSize <= 0) {
+        log_error_exit("%s", "HashTable is NULL or has no space.\n");
+    } else if(key == NULL) {
+        log_error_exit("%s", "Key is NULL or empty.\n");
+    } else if(data == NULL) {
+        log_error_exit("%s", "Data is NULL.\n");
+    }
+
+    // Get hashcode from key and insert into entry chain
+    int hashValue = hash(key, ht->maxSize);
+    log_debug("Hashing entry with value: %d\n", hashValue);
+
+    insertBack(&ht->entries[hashValue].chain, data, key);
+}
+
+void* getEntry(HashTable* ht, char* key)
+{
+    if(ht == NULL || ht->maxSize <= 0)
+        log_error_exit("%s", "HashTable is NULL or has no space.\n");
+    if(key == NULL)
+        log_error_exit("%s", "Key is NULL or empty.\n");
+
+    int hashValue = hash(key, ht->maxSize);
+    return findElement(ht->entries[hashValue].chain, key);
+}
+
+void deleteEntry(HashTable* ht, char* key)
+{
+    if(ht == NULL || ht->maxSize <= 0) {
+        log_error_exit("%s", "HashTable is NULL or has no space.\n");
+    } else if(key == NULL) {
+        log_error_exit("%s", "Key is NULL or empty.\n");
+    }
+
+    // Get hashcode from key
+    int hashValue = hash(key, ht->maxSize);
+
+    // Find data element from LinkedList
+    void* data = findElement(ht->entries[hashValue].chain, key);
+    if(data == NULL)
+        return;
+    
+    // Delete node from entry chain
+    data = deleteDataFromList(&ht->entries[hashValue].chain, key);
+
+    // Delete data from Data struct
+    ht->entries[hashValue].chain.deleteData(data);
 }
 
 static unsigned int hash(char* string, unsigned int size)

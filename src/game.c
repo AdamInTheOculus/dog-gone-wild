@@ -6,6 +6,7 @@
 **/
 
 #include "game.h"
+#include "debug.h"
 
 Game initializeGame(int width, int height)
 {

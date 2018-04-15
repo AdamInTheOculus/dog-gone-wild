@@ -19,6 +19,7 @@
  **/
 typedef struct listNode{
     void* data;
+    char* key;
     struct listNode* previous;
     struct listNode* next;
 } Node;
@@ -67,18 +68,9 @@ List initializeList(char* (*printFunction)(void* toBePrinted),void (*deleteFunct
 *@post data is valid to be added to a linked list
 *@return On success returns a node that can be added to a linked list. On failure, returns NULL.
 *@param data - is a void * pointer to any data type.  Data must be allocated on the heap.
+*@param key - is a string that identifies specific set of data (HashTable implementation)
 **/
-Node* initializeNode(void* data);
-
-
-
-/**Inserts a Node at the front of a linked list.  List metadata is updated
-* so that head and tail pointers are correct.
-*@pre 'List' type must exist and be used in order to keep track of the linked list.
-*@param list pointer to the dummy head of the list
-*@param toBeAdded a pointer to data that is to be added to the linked list
-**/
-void insertFront(List* list, void* toBeAdded);
+Node* initializeNode(void* data, char* key);
 
 
 
@@ -88,7 +80,7 @@ void insertFront(List* list, void* toBeAdded);
 *@param list pointer to the dummy head of the list
 *@param toBeAdded a pointer to data that is to be added to the linked list
 **/
-void insertBack(List* list, void* toBeAdded);
+void insertBack(List* list, void* toBeAdded, char* key);
 
 
 
@@ -100,30 +92,18 @@ void insertBack(List* list, void* toBeAdded);
 void clearList(List* list);
 
 
-/** Uses the comparison function pointer to place the element in the 
-* appropriate position in the list.
-* should be used as the only insert function if a sorted list is required.  
-*@pre List exists and has memory allocated to it. Node to be added is valid.
-*@post The node to be added will be placed immediately before or after the first occurrence of a related node
-*@param list a pointer to the dummy head of the list containing function pointers for delete and compare, as well 
-as a pointer to the first and last element of the list.
-*@param toBeAdded a pointer to data that is to be added to the linked list
-**/
-void insertSorted(List* list, void* toBeAdded);
-
-
 
 /** Removes data from from the list, deletes the node and frees the memory,
  * changes pointer values of surrounding nodes to maintain list structure.
  * returns the data 
  * You can assume that the list contains no duplicates
  *@pre List must exist and have memory allocated to it
- *@post toBeDeleted will have its memory freed if it exists in the list.
+ *@post LinkedList node will be freed but data will not
  *@param list pointer to the dummy head of the list containing deleteFunction function pointer
- *@param toBeDeleted pointer to data that is to be removed from the list
+ *@param key string identifier that is to be removed from the list
  *@return on success: void * pointer to data  on failure: NULL
  **/
-void* deleteDataFromList(List* list, void* toBeDeleted);
+void* deleteDataFromList(List* list, char* key);
 
 
 
@@ -155,6 +135,7 @@ returned string must be freed by the calling function.
 char* toString(List list);
 
 
+
 /** Function for creating an iterator for the linked list. 
  * This node contains abstracted (void *) data as well as previous and next
  * pointers to connect to other nodes in the list
@@ -164,6 +145,8 @@ char* toString(List list);
  *@param list - a pointer to the list to iterate over.
 **/
 ListIterator createIterator(List list);
+
+
 
 /** Function that returns the next element of the list through the iterator. 
 * This function returns the data at head of the list the first time it is called after.
@@ -176,11 +159,30 @@ ListIterator createIterator(List list);
 **/
 void* nextElement(ListIterator* iter);
 
+
+
 /**Returns the number of elements in the list.
  *@pre List must exist, but does not have to have elements.
  *@param list - the list struct.
  *@return on success: number of eleemnts in the list (0 or more).  on failure: -1 (e.g. list not initlized correctly)
  **/
 int getLength(List list);
+
+
+
+/** Function that searches for an element in the list using a comparator function.
+ * If an element is found, a pointer to the data of that element is returned
+ * Returns NULL if the element is not found.
+ *@pre List exists and is valid.  Comparator function has been provided.
+ *@post List remains unchanged.
+ *@return The data associated with the list element that matches the search criteria.  If element is not found, return NULL.
+ *@param list - a list sruct
+ *@param customCompare - a pointer to comparator fuction for customizing the search
+ *@param searchRecord - a pointer to search data, which contains seach criteria
+ *Note: while the arguments of compare() and searchRecord are all void, it is assumed that records they point to are
+ *      all of the same type - just like arguments to the compare() function in the List struct
+ **/
+void* findElement(List list, char* key);
+
 
 #endif

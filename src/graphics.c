@@ -6,6 +6,7 @@
 **/
 
 #include "graphics.h"
+#include "debug.h"
 
 #define IMAGE_COUNT 50
 

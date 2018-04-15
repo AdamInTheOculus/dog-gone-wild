@@ -41,15 +41,17 @@ void clearList(List* list){
     list->tail = NULL;
 }
 
-Node* initializeNode(void* data){
+Node* initializeNode(void* data, char* key){
     Node* tmpNode;
     
     tmpNode = (Node*)malloc(sizeof(Node));
     
-    if (tmpNode == NULL){
+    if (tmpNode == NULL || key == NULL || strlen(key) < 1){
         return NULL;
     }
     
+    strcpy(tmpNode->key, "");
+    strcat(tmpNode->key, key);
     tmpNode->data = data;
     tmpNode->previous = NULL;
     tmpNode->next = NULL;
@@ -57,12 +59,12 @@ Node* initializeNode(void* data){
     return tmpNode;
 }
 
-void insertBack(List* list, void* toBeAdded){
-    if (list == NULL || toBeAdded == NULL){
+void insertBack(List* list, void* toBeAdded, char* key){
+    if (list == NULL || toBeAdded == NULL || key == NULL){
         return;
     }
     
-    Node* newNode = initializeNode(toBeAdded);
+    Node* newNode = initializeNode(toBeAdded, key);
 
     if (list->head == NULL && list->tail == NULL){
         list->head = newNode;
@@ -74,24 +76,6 @@ void insertBack(List* list, void* toBeAdded){
     }
     list->length++;
     
-}
-
-void insertFront(List* list, void* toBeAdded){
-    if (list == NULL || toBeAdded == NULL){
-        return;
-    }
-    
-    Node* newNode = initializeNode(toBeAdded);
-    
-    if (list->head == NULL && list->tail == NULL){
-        list->head = newNode;
-        list->tail = list->head;
-    } else {
-        newNode->next = list->head;
-        list->head->previous = newNode;
-        list->head = newNode;
-    }
-    list->length++;
 }
 
 void* getFromFront(List list){
@@ -113,15 +97,15 @@ void* getFromBack(List list){
     
 }
 
-void* deleteDataFromList(List* list, void* toBeDeleted){
-    if (list == NULL || toBeDeleted == NULL){
+void* deleteDataFromList(List* list, char* key){
+    if (list == NULL || key == NULL || strlen(key) < 1){
         return NULL;
     }
     
     Node* tmp = list->head;
     
     while(tmp != NULL){
-        if (list->compare(toBeDeleted, tmp->data) == 0){
+        if (strcmp(tmp->key, key) == 0){
             //Unlink the node
             Node* delNode = tmp;
             
@@ -148,52 +132,6 @@ void* deleteDataFromList(List* list, void* toBeDeleted){
     }
     list->length--;
     return NULL;
-}
-
-void insertSorted(List *list, void *toBeAdded){
-    if (list == NULL || toBeAdded == NULL){
-        return;
-    }
-    
-    if (list->head == NULL){
-        insertBack(list, toBeAdded);
-        return;
-    }
-    
-    if (list->compare(toBeAdded, list->head->data) <= 0){
-        insertFront(list, toBeAdded);
-        return;
-    }
-    
-    if (list->compare(toBeAdded, list->tail->data) > 0){
-        insertBack(list, toBeAdded);
-        return;
-    }
-    
-    Node* currNode = list->head;
-    
-    while (currNode != NULL){
-        if (list->compare(toBeAdded, currNode->data) <= 0){
-        
-            char* currDescr = list->printData(currNode->data); 
-            char* newDescr = list->printData(toBeAdded); 
-
-            free(currDescr);
-            free(newDescr);
-        
-            Node* newNode = initializeNode(toBeAdded);
-            newNode->next = currNode;
-            newNode->previous = currNode->previous;
-            currNode->previous->next = newNode;
-            currNode->previous = newNode;
-            list->length++;
-            return;
-        }
-    
-        currNode = currNode->next;
-    }
-    list->length++;
-    return;
 }
 
 char* toString(List list){
@@ -252,5 +190,23 @@ int getLength (List list){
     }
     list.length = counter;;
     return list.length;
+
+}
+
+void* findElement(List list, char* key){
+    if(list.head == NULL || key == NULL || strlen(key) < 1){
+        return NULL;
+    }
+    
+    Node* current = list.head;
+
+    while(current != NULL){
+        if(strcmp(current->key, key) == 0){
+            return current->data;
+        }
+        current = current->next;
+    }
+
+   return NULL;
 
 }

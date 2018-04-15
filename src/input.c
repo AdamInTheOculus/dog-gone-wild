@@ -6,6 +6,7 @@
 **/
 
 #include "input.h"
+#include "debug.h"
 
 #define KEY_COUNT 50
 #define KEY_STATE_COUNT 3
