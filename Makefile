@@ -12,7 +12,7 @@ BIN = bin
 INCLUDES = -Iinclude -Iinclude/adt
 ifneq ($(OS), Windows_NT)
 	C_FLAGS += -std=c11
-	SRC = src/input.c src/graphics.c src/game.c src/main.c
+	SRC = src/input.c src/graphics.c src/game.c src/main.c src/sprite.c
 	SRC += src/adt/HashTableAPI.c src/adt/LinkedListAPI.c
 	SDL_CFLAGS := $(shell sdl2-config --cflags)
 	SDL_LDFLAGS := $(shell sdl2-config --libs)
@@ -25,7 +25,7 @@ else
 	# -w suppresses warnings
 	# -W1,-subsystem,windows gets rid of console window 
 	COMPILER_FLAGS = -w
-	SRC = src\input.c src\graphics.c src\game.c src\main.c
+	SRC = src\input.c src\graphics.c src\game.c src\main.c src\sprite.c
 	SRC += src\adt\HashTableAPI.c src\adt\LinkedListAPI.c
 	SDL_CFLAGS = -Iwindows\mingw32-dev\include
 	SDL_LDFLAGS = -Lwindows\mingw32-dev\lib

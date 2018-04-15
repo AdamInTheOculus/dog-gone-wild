@@ -40,15 +40,6 @@ Graphics initializeGraphics(const int width, const int height)
         log_error_exit("%s\n", SDL_GetError());
     }
 
-    // Load all images here
-    char* surface = printSurface(loadImage(&g.spriteManager, "assets/sprites/tmnt-dog.png"));
-    log_debug("%s\n", surface);
-    free(surface);
-
-    surface = printSurface(loadImage(&g.spriteManager, "assets/sprites/loz-lttp-enemies.png"));
-    log_debug("%s\n", surface);
-    free(surface);
-
     SDL_SetWindowTitle(g.window, "Dog Gone Wild");
     return g;
 }
@@ -114,7 +105,7 @@ void blitSurface(Graphics* g, SDL_Texture* texture, SDL_Rect* srcRect, SDL_Rect*
 /** void render()
  * Render everything to screen
 **/
-void render(Graphics* g)
+void renderGraphics(Graphics* g)
 {
     if(g == NULL)
     {
@@ -128,7 +119,7 @@ void render(Graphics* g)
 /** void clear()
  * Clears entire screen
 **/
-void clear(Graphics* g)
+void clearGraphics(Graphics* g)
 {
     if(g == NULL)
     {
@@ -191,7 +182,7 @@ int compareSurfaces(const void* first, const void* second)
         return -2;
     }
 
-    if(first == second) // They point to the same address
+    if(first == second) // Check if they point to the same address
         return 0;
     else
         return 1;

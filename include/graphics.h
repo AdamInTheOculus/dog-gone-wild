@@ -39,11 +39,11 @@ void blitSurface(Graphics* g, SDL_Texture* texture, SDL_Rect* srcRect, SDL_Rect*
 /** void render()
  * Render everything to screen
 **/
-void render();
+void renderGraphics();
 
 /** void clear()
  * Clears entire screen
 **/
-void clear();
+void clearGraphics();
 
 #endif

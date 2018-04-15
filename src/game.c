@@ -35,17 +35,18 @@ void destroyGame(Game* game)
 
 void runGame(Game* game)
 {
-    loop(&game->input, &game->graphics);
+    loop(game, &game->input, &game->graphics);
 }
 
-void loop(Input* input, Graphics* graphics)
+void loop(Game* game, Input* input, Graphics* graphics)
 {
     if(input == NULL)
         log_error_exit("Input is NULL. %s\n", SDL_GetError());
 
-    int LAST_UPDATE_TIME = SDL_GetTicks();
+    game->player = createSprite(graphics, "assets/sprites/ff6-mog.png", 6, 6, 16, 24, 100, 100, NULL, NULL);
 
     // Start of game loop
+    int LAST_UPDATE_TIME = SDL_GetTicks();
     while(true)
     {
         clearInput(input);
@@ -60,15 +61,21 @@ void loop(Input* input, Graphics* graphics)
         int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
 
         update(MIN(ELAPSED_TIME_MS, MAX_FRAME_TIME));
-        draw(graphics);
+        draw(game, graphics);
         LAST_UPDATE_TIME = ELAPSED_TIME_MS;
     }
 }
 
-void draw(Graphics* g)
+void draw(Game* game, Graphics* graphics)
 {
-    if(g == NULL)
+    if(graphics == NULL)
         log_error_exit("Graphics pointer is NULL. %s\n", SDL_GetError());
+    if(game == NULL)
+        log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
+
+    clearGraphics(graphics);
+    drawSprite(graphics, &game->player, 100, 100);
+    renderGraphics(graphics);
 }
 
 void update(float elapsedTime)

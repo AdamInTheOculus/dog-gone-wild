@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "sprite.h"
 #include "graphics.h"
 #include "input.h"
 
@@ -14,14 +15,15 @@ typedef struct Game {
     int height;
     Graphics graphics;
     Input input;
+    Sprite player;
     
 } Game;
 
 Game initializeGame();
 void destroyGame(Game* game);
 void runGame(Game* game);
-void loop(Input* input, Graphics* graphics);
-void draw(Graphics* g);
+void loop(Game* game, Input* input, Graphics* graphics);
+void draw(Game* game , Graphics* graphics);
 void update(float elapsedTime);
 
 #endif
