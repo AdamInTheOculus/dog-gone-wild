@@ -14,12 +14,12 @@
 #define RESET "\x1B[0m"
 
 #define log_error_exit(fmt, ...) {\
-            fprintf(stderr, RED "ERROR" RESET " ==> "GRN"%s:%d"RESET" "CYN"%s()"RESET" ==> " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__);\
+            fprintf(stderr, RED "ERROR" RESET " ==> "YEL"%s:%d"RESET" "CYN"%s()"RESET" ==> " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__);\
             exit(-1);\
         }
 
 #define log_debug(fmt, ...) { \
-            fprintf(stderr, MAG "DEBUG" RESET " ==> "GRN"%s:%d"RESET" "CYN"%s()"RESET" ==> " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__);\
+            fprintf(stderr, MAG "DEBUG" RESET " ==> "YEL"%s:%d"RESET" "CYN"%s()"RESET" ==> " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__);\
         }
 
 #define log(fmt, ...) { \
