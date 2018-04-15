@@ -50,7 +50,7 @@ Node* initializeNode(void* data, char* key){
         return NULL;
     }
     
-    strcpy(tmpNode->key, "");
+    tmpNode->key[0] = '\0';
     strcat(tmpNode->key, key);
     tmpNode->data = data;
     tmpNode->previous = NULL;

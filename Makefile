@@ -45,7 +45,7 @@ all:
 # Optional rule for testing HashTable
 # Ensure hashtable.c has an `int main()` function
 hash:
-	$(CC) $(C_FLAGS) $(INCLUDES) src/adt/hashtable.c -o $(BIN)/hash
+	$(CC) $(C_FLAGS) $(INCLUDES) src/adt/* src/test/hashtest.c -o $(BIN)/hash
 
 clean:
 	rm -r bin/*

@@ -15,7 +15,7 @@ typedef struct HashTable {
 
 HashTable initializeHashTable(int size, char* (*printFunction)(void* toBePrinted), void (*deleteFunction)(void* toBeDeleted), int (*compareFunction)(const void* first, const void* second));
 void deleteHashTable(HashTable* table);
-void insertEntry(HashTable* ht, char* key, void* data);
+bool insertEntry(HashTable* ht, char* key, void* data);
 void deleteEntry(HashTable* ht, char* key);
 void* getEntry(HashTable* ht, char* key);
 

@@ -19,7 +19,7 @@
  **/
 typedef struct listNode{
     void* data;
-    char* key;
+    char key[50];
     struct listNode* previous;
     struct listNode* next;
 } Node;

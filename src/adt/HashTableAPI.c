@@ -62,29 +62,43 @@ void deleteHashTable(HashTable* ht)
     free(ht->entries);
 }
 
-void insertEntry(HashTable* ht, char* key, void* data)
+bool insertEntry(HashTable* ht, char* key, void* data)
 {
     if(ht == NULL || ht->maxSize <= 0) {
-        log_error_exit("%s", "HashTable is NULL or has no space.\n");
+        log_error("%s", "HashTable is NULL or has no space.\n");
+        return false;
     } else if(key == NULL) {
-        log_error_exit("%s", "Key is NULL or empty.\n");
+        log_error("%s", "Key is NULL or empty.\n");
+        return false;
     } else if(data == NULL) {
-        log_error_exit("%s", "Data is NULL.\n");
+        log_error("%s", "Data is NULL.\n");
+        return false;
     }
 
     // Get hashcode from key and insert into entry chain
     int hashValue = hash(key, ht->maxSize);
     log_debug("Hashing entry with value: %d\n", hashValue);
 
+    // Check if node with key already exists
+    if(getEntry(ht, key) != NULL)
+    {
+        log_debug("Entry with key [%s] already exists. Nothing added.\n", key);
+        return false;
+    }
+
     insertBack(&ht->entries[hashValue].chain, data, key);
+    return true;
 }
 
 void* getEntry(HashTable* ht, char* key)
 {
-    if(ht == NULL || ht->maxSize <= 0)
-        log_error_exit("%s", "HashTable is NULL or has no space.\n");
-    if(key == NULL)
-        log_error_exit("%s", "Key is NULL or empty.\n");
+    if(ht == NULL || ht->maxSize <= 0) {
+        log_error("%s", "HashTable is NULL or has no space.\n");
+        return NULL;
+    } else if(key == NULL) {
+        log_error("%s", "Key is NULL or empty.\n");
+        return NULL;
+    }
 
     int hashValue = hash(key, ht->maxSize);
     return findElement(ht->entries[hashValue].chain, key);
@@ -93,13 +107,16 @@ void* getEntry(HashTable* ht, char* key)
 void deleteEntry(HashTable* ht, char* key)
 {
     if(ht == NULL || ht->maxSize <= 0) {
-        log_error_exit("%s", "HashTable is NULL or has no space.\n");
+        log_error("%s", "HashTable is NULL or has no space.\n");
+        return;
     } else if(key == NULL) {
-        log_error_exit("%s", "Key is NULL or empty.\n");
+        log_error("%s", "Key is NULL or empty.\n");
+        return;
     }
 
     // Get hashcode from key
     int hashValue = hash(key, ht->maxSize);
+    log_debug("Delete entry with value: %d\n", hashValue);
 
     // Find data element from LinkedList
     void* data = findElement(ht->entries[hashValue].chain, key);
