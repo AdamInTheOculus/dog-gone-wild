@@ -26,8 +26,8 @@ else
 	COMPILER_FLAGS = -w
 	SRC = src\input.c src\graphics.c src\game.c src\main.c
 	SRC += src\adt\HashTableAPI.c src\adt\LinkedListAPI.c
-	SDL_CFLAGS = -IC:\mingw32-dev\include
-	SDL_LDFLAGS = -LC:\mingw32-dev\lib
+	SDL_CFLAGS = -Iwindows\mingw32-dev\include
+	SDL_LDFLAGS = -Lwindows\mingw32-dev\lib
 	SDL_LIBS = -lmingw32 -lSDL2main -lSDL2
 endif
 
