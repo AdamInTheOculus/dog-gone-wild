@@ -40,6 +40,15 @@ Graphics initializeGraphics(const int width, const int height)
         log_error_exit("%s\n", SDL_GetError());
     }
 
+    // Load all images here
+    char* surface = printSurface(loadImage(&g.spriteManager, "assets/sprites/tmnt-dog.png"));
+    log_debug("%s\n", surface);
+    free(surface);
+
+    surface = printSurface(loadImage(&g.spriteManager, "assets/sprites/loz-lttp-enemies.png"));
+    log_debug("%s\n", surface);
+    free(surface);
+
     SDL_SetWindowTitle(g.window, "Dog Gone Wild");
     return g;
 }
