@@ -1,8 +1,10 @@
 #include "sprite.h"
 #include "debug.h"
 
+#define SPRITE_SCALE 2
+
 Sprite createSprite(Graphics* g, char* filePath, int srcX, int srcY, int width, int height, 
-                    float posX, float posY,void (*deleteSprite)(Sprite*), void(*updateSprite)(Sprite*))
+                    float posX, float posY, void (*deleteSprite)(Sprite*), void(*updateSprite)(Sprite*))
 {
     if(g == NULL)
         log_error_exit("Graphics pointer [%p] is NULL.\n", g);
@@ -38,7 +40,13 @@ void drawSprite(Graphics* g, Sprite* s, int x, int y)
         log_error_exit("Sprite pointer [%p] is NULL.\n", s);
 
 
-    SDL_Rect destRect = { x, y, s->srcRect.w, s->srcRect.h };
+    SDL_Rect destRect = { 
+        x, 
+        y, 
+        s->srcRect.w * SPRITE_SCALE, 
+        s->srcRect.h * SPRITE_SCALE
+    };
+
     blitSurface(g, s->spriteSheet, &s->srcRect, &destRect);
 }
 

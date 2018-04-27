@@ -22,16 +22,18 @@
             fprintf(stderr, RED "ERROR" RESET " ==> "YEL"%s:%d"RESET" "CYN"%s()"RESET" ==> " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__);\
         }
 
-#define log_debug(fmt, ...) { \
+#define log_debug(fmt, ...) {\
             fprintf(stderr, MAG "DEBUG" RESET " ==> "YEL"%s:%d"RESET" "CYN"%s()"RESET" ==> " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__);\
         }
 
-#define log(fmt, ...) { \
+#define log(fmt, ...) {\
             fprintf(stdout, "" GRN fmt RESET, __VA_ARGS__);\
         }
 
 #else
-#define log_error_exit(str, ...)
+#define log_error_exit(str, ...) {\
+            exit(1);\
+        }
 #define log_debug(str, ...)
 #define log(str, ...)
 #endif

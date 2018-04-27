@@ -19,7 +19,6 @@ Game initializeGame(int width, int height)
 
     game.graphics = initializeGraphics(game.width, game.height);
     game.input = initializeInput();
-
     return game;
 }
 
@@ -43,7 +42,7 @@ void loop(Game* game, Input* input, Graphics* graphics)
     if(input == NULL)
         log_error_exit("Input is NULL. %s\n", SDL_GetError());
 
-    game->player = createSprite(graphics, "assets/sprites/ff6-mog.png", 6, 6, 16, 24, 100, 100, NULL, NULL);
+    game->player = createSprite(graphics, "assets/sprites/ff6-sabin.png", 1, 60, 20, 30, 100, 100, NULL, NULL);
 
     // Start of game loop
     int LAST_UPDATE_TIME = SDL_GetTicks();
@@ -52,7 +51,7 @@ void loop(Game* game, Input* input, Graphics* graphics)
         clearInput(input);
         updateInput(input);
 
-        // Quit application if ESCAPE key or X is pressed
+        // TODO: Safe shutdown when user requests to exit
         if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE) || wasExitRequested(input))
             return;
 

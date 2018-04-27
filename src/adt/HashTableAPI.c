@@ -8,14 +8,6 @@
 #include "HashTableAPI.h"
 #include "debug.h"
 
-/** 
- * Implement FNV-1a hash algorithm
- * https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
- *
- * @param string Represents a label for some information.
- * @param size Size of hash table used for modulo operation.
- * @return A non-zero number representing the index in a table.
-**/
 static unsigned int hash(char* string, unsigned int size);
 
 HashTable initializeHashTable(int size, char* (*printFunction)(void* toBePrinted), void (*deleteFunction)(void* toBeDeleted), int (*compareFunction)(const void* first, const void* second)){
@@ -87,6 +79,7 @@ bool insertEntry(HashTable* ht, char* key, void* data)
     }
 
     insertBack(&ht->entries[hashValue].chain, data, key);
+    ht->currentSize++;
     return true;
 }
 
@@ -128,8 +121,17 @@ void deleteEntry(HashTable* ht, char* key)
 
     // Delete data from Data struct
     ht->entries[hashValue].chain.deleteData(data);
+    ht->currentSize--;
 }
 
+/** 
+ * Implement FNV-1a hash algorithm
+ * https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
+ *
+ * @param string Represents a label for some information.
+ * @param size Size of hash table used for modulo operation.
+ * @return A non-zero number representing the index in a table.
+**/
 static unsigned int hash(char* string, unsigned int size)
 {
     if(string == NULL || strlen(string) < 1)
