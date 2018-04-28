@@ -4,6 +4,8 @@
 #include <SDL2/SDL.h>
 #include "graphics.h"
 
+#define SPRITE_SCALE 2
+
 typedef struct Sprite {
 
     /** 

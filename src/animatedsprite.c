@@ -22,6 +22,7 @@ static int compareVector2(const void* first, const void* second);
 AnimatedSprite createAnimatedSprite(
     Graphics* graphics,
     char* filePath,
+    int animationCount,
     int srcX, int srcY,
     int width, int height,
     float posX, float posY,
@@ -34,7 +35,7 @@ AnimatedSprite createAnimatedSprite(
     // ====================================
     // == Validate all pointer arguments ==
     // ====================================
-    if(g == NULL)
+    if(graphics == NULL)
         log_error_exit("%s", "Graphics pointer is NULL.\n");
     if(filePath == NULL || strlen(filePath) < 1)
         log_error_exit("%s", "Filepath is NULL or empty.\n");
@@ -70,8 +71,8 @@ AnimatedSprite createAnimatedSprite(
     // =======================================================
     // == Initialize HashTables for animations and offsets  ==
     // =======================================================
-    as.animations = initializeHashTable(&printRect, &deleteRect, &compareRects);
-    as.offsets = initializeHashTable(&printVector2, &deleteVector2, &compareVector2);
+    as.animations = initializeHashTable(animationCount, &printRect, &deleteRect, &compareRects);
+    as.offsets = initializeHashTable(animationCount, &printVector2, &deleteVector2, &compareVector2);
 
     // ==============================
     // == Assign function pointers ==
@@ -85,7 +86,7 @@ AnimatedSprite createAnimatedSprite(
 /**
  * Adds animation and offset to HashTables of a sprite.
 **/
-void addAnimation(AnimatedSprite* sprite, char* name, int frameCount, Vector2 position, Vector2 size, Vector2 offset)
+void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vector2 position, Vector2 size, Vector2 offset)
 {
     if(sprite == NULL)
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
@@ -105,14 +106,18 @@ void addAnimation(AnimatedSprite* sprite, char* name, int frameCount, Vector2 po
         if((newRect = malloc(sizeof(SDL_Rect))) == NULL)
             log_error_exit("Failed to dynamically allocate SDL_Rect for [%s] animation.\n", name);
 
-        newRect = {(i + position.x) * width, position.y, width, height};
-        insertBack(&rectangles, (void*)newRect);
+
+        newRect->x = (i + position.x) * size.x;
+        newRect->y = position.y;
+        newRect->w = size.x;
+        newRect->h = size.y;
+        insertBack(&rectangles, (void*)newRect, "");
     }
 
     // ============================================
     // == Attempt to insert animation rectangles ==
     // ============================================
-    if(insertEntry(sprite->animations, name, (void*)rectangles) == false)
+    if(insertEntry(&sprite->animations, name, (void*)&rectangles) == false)
         log_error_exit("Failed to insert animation [%s] of %d frames.\n", name, frameCount);
 
     // ========================================
@@ -121,7 +126,7 @@ void addAnimation(AnimatedSprite* sprite, char* name, int frameCount, Vector2 po
     Vector2* _offset = malloc(sizeof(Vector2));
     _offset->x = offset.x;
     _offset->y = offset.y;
-    if(insertEntry(sprite->offsets, name, (void*)_offset) == false)
+    if(insertEntry(&sprite->offsets, name, (void*)_offset) == false)
         log_error_exit("Failed to insert offset of animation [%s].\n", name);
 }
 
@@ -133,8 +138,8 @@ void resetAnimations(AnimatedSprite* sprite)
     if(sprite == NULL)
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
 
-    clearHashTable(sprite->animations);
-    clearHashTable(sprite->offsets);
+    clearHashTable(&sprite->animations);
+    clearHashTable(&sprite->offsets);
 }
 
 /**
@@ -150,7 +155,7 @@ void playAnimation(AnimatedSprite* sprite, char* animation, bool playOnce)
     sprite->currentAnimationOnce = playOnce;
     if(strcmp(sprite->currentAnimation, animation) != 0)
     {
-        strcpy(sprite->currentAnimation, animaton);
+        strcpy(sprite->currentAnimation, animation);
         sprite->frameIndex = 0;
     }
 }
@@ -175,7 +180,7 @@ void setAnimationVisible(AnimatedSprite* sprite, bool visibility)
     if(sprite == NULL)
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
 
-    sprite->visible = visible;
+    sprite->visible = visibility;
 }
 
 /**
@@ -189,21 +194,21 @@ void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime)
     // ========================================
     // == Update Sprite and time that passed ==
     // ========================================
-    sprite->update(sprite);
+    sprite->sprite.update(&sprite->sprite);
     sprite->timeElapsed += elapsedTime;
     if(sprite->timeElapsed >= sprite->timeToUpdate)
     {
         void* animations = NULL;
-        if((animations = getEntry(sprite->animations, sprite->currentAnimation)) == NULL)
+        if((animations = getEntry(&sprite->animations, sprite->currentAnimation)) == NULL)
             log_error_exit("Failed to get animations for [%s].\n", sprite->currentAnimation);
 
         // Attempt to call getLength when passing in a casted & dereferenced pointer
-        log_debug("Animation - Index=%d, Length=%d\n", sprite->frameIndex, getLength(*(List*)animation));
+        log_debug("Animation - Index=%d, Length=%d\n", sprite->frameIndex, getLength(*(List*)animations));
 
         // ==============================================================
         // == Check if there are more images to animate for our sprite ==
         // ==============================================================
-        if(sprite->frameIndex < getLength(*(List*)animation) - 1)
+        if(sprite->frameIndex < getLength(*(List*)animations) - 1)
             sprite->frameIndex++;
 
         // ========================================
@@ -217,7 +222,6 @@ void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime)
             sprite->frameIndex = 0;
             sprite->doneAnimation(sprite->currentAnimation);
         }
-
     }
 }
 
@@ -235,7 +239,7 @@ void drawAnimatedSprite(Graphics* g, AnimatedSprite* sprite, Vector2 pos)
         return;
 
     // Retrieve offset Vector2 from table
-    void* offsetPtr = getEntry(sprite->offsets, sprite->currentAnimation);
+    void* offsetPtr = getEntry(&sprite->offsets, sprite->currentAnimation);
     Vector2* offset = (Vector2*)offsetPtr;
 
     // 
@@ -243,10 +247,10 @@ void drawAnimatedSprite(Graphics* g, AnimatedSprite* sprite, Vector2 pos)
     destRect.x = pos.x + offset->x;
     destRect.y = pos.y + offset->y;
     destRect.w = sprite->sprite.srcRect.w * SPRITE_SCALE;
-    destRect.l = sprite->sprite.srcRect.l * SPRITE_SCALE;
+    destRect.h = sprite->sprite.srcRect.h * SPRITE_SCALE;
 
-    SDL_Rect* srcRect = getAnimationAtIndex(sprite, sprite->frameIndex);
-    blitSurface(g, &sprite->sprite.spriteSheet, srcRect, &destRect);
+    SDL_Rect* srcRect = getAnimationAtIndex(sprite);
+    blitSurface(g, sprite->sprite.spriteSheet, srcRect, &destRect);
 }
 
 /**
@@ -257,11 +261,15 @@ SDL_Rect* getAnimationAtIndex(AnimatedSprite* sprite)
     if(sprite == NULL)
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
 
-    void* entry = getEntry(sprite->animations, sprite->currentAnimation);
+    // Get animation list from HashTable
+    void* entry = getEntry(&sprite->animations, sprite->currentAnimation);
     List* animations = (List*)entry;
+
+    // Reminder: `animations` is a LinkedList
+    // Iterate through list until SDL_Rect is found
+    int counter = 0;
     ListIterator iter = createIterator(*animations);
     void* element = NULL;
-    int counter = 0;
     while((element = nextElement(&iter)) != NULL)
     {
         if(counter == sprite->frameIndex)
@@ -270,6 +278,7 @@ SDL_Rect* getAnimationAtIndex(AnimatedSprite* sprite)
         counter++;
     }
 
+    // Return NULL if nothing is found.
     return NULL;
 }
 

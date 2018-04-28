@@ -70,7 +70,7 @@ List initializeList(char* (*printFunction)(void* toBePrinted),void (*deleteFunct
 *@param data - is a void * pointer to any data type.  Data must be allocated on the heap.
 *@param key - is a string that identifies specific set of data (HashTable implementation)
 **/
-Node* initializeNode(void* data, char* key);
+Node* initializeNode(void* data, const char* key);
 
 
 
@@ -80,7 +80,7 @@ Node* initializeNode(void* data, char* key);
 *@param list pointer to the dummy head of the list
 *@param toBeAdded a pointer to data that is to be added to the linked list
 **/
-void insertBack(List* list, void* toBeAdded, char* key);
+void insertBack(List* list, void* toBeAdded, const char* key);
 
 
 
@@ -103,7 +103,7 @@ void clearList(List* list);
  *@param key string identifier that is to be removed from the list
  *@return on success: void * pointer to data  on failure: NULL
  **/
-void* deleteDataFromList(List* list, char* key);
+void* deleteDataFromList(List* list, const char* key);
 
 
 
@@ -182,7 +182,7 @@ int getLength(List list);
  *Note: while the arguments of compare() and searchRecord are all void, it is assumed that records they point to are
  *      all of the same type - just like arguments to the compare() function in the List struct
  **/
-void* findElement(List list, char* key);
+void* findElement(List list, const char* key);
 
 
 #endif

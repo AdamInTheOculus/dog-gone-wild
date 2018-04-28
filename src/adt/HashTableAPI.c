@@ -8,7 +8,7 @@
 #include "HashTableAPI.h"
 #include "debug.h"
 
-static unsigned int hash(char* string, unsigned int size);
+static unsigned int hash(const char* string, unsigned int size);
 
 HashTable initializeHashTable(int size, char* (*printFunction)(void* toBePrinted), void (*deleteFunction)(void* toBeDeleted), int (*compareFunction)(const void* first, const void* second)){
     if(size < 1)
@@ -72,7 +72,7 @@ void clearHashTable(HashTable* ht)
     }
 }
 
-bool insertEntry(HashTable* ht, char* key, void* data)
+bool insertEntry(HashTable* ht, const char* key, void* data)
 {
     if(ht == NULL || ht->maxSize <= 0) {
         log_error("%s", "HashTable is NULL or has no space.\n");
@@ -101,7 +101,7 @@ bool insertEntry(HashTable* ht, char* key, void* data)
     return true;
 }
 
-void* getEntry(HashTable* ht, char* key)
+void* getEntry(HashTable* ht, const char* key)
 {
     if(ht == NULL || ht->maxSize <= 0) {
         log_error("%s", "HashTable is NULL or has no space.\n");
@@ -115,7 +115,7 @@ void* getEntry(HashTable* ht, char* key)
     return findElement(ht->entries[hashValue].chain, key);
 }
 
-void deleteEntry(HashTable* ht, char* key)
+void deleteEntry(HashTable* ht, const char* key)
 {
     if(ht == NULL || ht->maxSize <= 0) {
         log_error("%s", "HashTable is NULL or has no space.\n");
@@ -150,7 +150,7 @@ void deleteEntry(HashTable* ht, char* key)
  * @param size Size of hash table used for modulo operation.
  * @return A non-zero number representing the index in a table.
 **/
-static unsigned int hash(char* string, unsigned int size)
+static unsigned int hash(const char* string, unsigned int size)
 {
     if(string == NULL || strlen(string) < 1)
         return 0;

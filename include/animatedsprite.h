@@ -27,12 +27,13 @@ typedef struct AnimatedSprite {
     char currentAnimation[50];  // ID of current animation playing.
 
     void (*setupAnimations)();
-    void (*animationDone)(char* animation);
+    void (*doneAnimation)(char* animation);
 } AnimatedSprite;
 
 AnimatedSprite createAnimatedSprite(
     Graphics* graphics,
     char* filePath,
+    int animationCount,
     int srcX, int srcY,
     int width, int height,
     float posX, float posY,
@@ -57,7 +58,7 @@ void playAnimation(
 **/
 void addAnimation(
     AnimatedSprite* sprite,
-    char* name,
+    const char* name,
     int frameCount,
     Vector2 position,
     Vector2 size,
@@ -79,19 +80,17 @@ void stopAnimation();
 /**
  * Changes the visibility of an animated sprite.
 **/
-void setAnimationVisible();
+void setAnimationVisible(AnimatedSprite* sprite, bool visibility);
 
 /**
  * Updates the animated sprite (timer).
- *  
- * @param int elapsedTime Represents last-frame time
 **/
-void updateAnimatedSprite(int elapsedTime);
+void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime);
 
 /**
  * Draws animated sprite to screen.
 **/
-void drawAnimatedSprite(Graphics* g, int posX, int posY);
+void drawAnimatedSprite(Graphics* g, AnimatedSprite* sprite, Vector2 pos);
 
 /**
  * Returns pointer to SDL_Rect of animation at current index of AnimatedSprite*

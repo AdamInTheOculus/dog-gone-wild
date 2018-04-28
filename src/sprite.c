@@ -1,8 +1,6 @@
 #include "sprite.h"
 #include "debug.h"
 
-#define SPRITE_SCALE 2
-
 Sprite createSprite(Graphics* g, char* filePath, int srcX, int srcY, int width, int height, 
                     float posX, float posY, void (*deleteSprite)(Sprite*), void(*updateSprite)(Sprite*))
 {

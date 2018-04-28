@@ -41,7 +41,7 @@ void clearList(List* list){
     list->tail = NULL;
 }
 
-Node* initializeNode(void* data, char* key){
+Node* initializeNode(void* data, const char* key){
     Node* tmpNode;
     
     tmpNode = (Node*)malloc(sizeof(Node));
@@ -59,7 +59,7 @@ Node* initializeNode(void* data, char* key){
     return tmpNode;
 }
 
-void insertBack(List* list, void* toBeAdded, char* key){
+void insertBack(List* list, void* toBeAdded, const char* key){
     if (list == NULL || toBeAdded == NULL || key == NULL){
         return;
     }
@@ -97,7 +97,7 @@ void* getFromBack(List list){
     
 }
 
-void* deleteDataFromList(List* list, char* key){
+void* deleteDataFromList(List* list, const char* key){
     if (list == NULL || key == NULL || strlen(key) < 1){
         return NULL;
     }
@@ -193,7 +193,7 @@ int getLength (List list){
 
 }
 
-void* findElement(List list, char* key){
+void* findElement(List list, const char* key){
     if(list.head == NULL || key == NULL || strlen(key) < 1){
         return NULL;
     }
