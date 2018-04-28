@@ -111,13 +111,17 @@ void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vect
         newRect->y = position.y;
         newRect->w = size.x;
         newRect->h = size.y;
-        insertBack(&rectangles, (void*)newRect, "");
+        insertBack(&rectangles, (void*)newRect, name);
     }
+
+    char* string = toString(rectangles);
+    log_debug("%s", string);
+    free(string);
 
     // ============================================
     // == Attempt to insert animation rectangles ==
     // ============================================
-    if(insertEntry(&sprite->animations, name, (void*)&rectangles) == false)
+    if(insertEntry(&sprite->animations, name, &rectangles) == false)
         log_error_exit("Failed to insert animation [%s] of %d frames.\n", name, frameCount);
 
     // ========================================
@@ -195,20 +199,28 @@ void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime)
     // == Update Sprite and time that passed ==
     // ========================================
     sprite->sprite.update(&sprite->sprite);
+
     sprite->timeElapsed += elapsedTime;
+    log("\nTime elapsed (%.2lf) vs. TimeToUpdate (%.2lf)\n",  sprite->timeElapsed, sprite->timeToUpdate);
     if(sprite->timeElapsed >= sprite->timeToUpdate)
     {
+        log("It's true for %s\n", sprite->currentAnimation);
         void* animations = NULL;
         if((animations = getEntry(&sprite->animations, sprite->currentAnimation)) == NULL)
             log_error_exit("Failed to get animations for [%s].\n", sprite->currentAnimation);
-
-        // Attempt to call getLength when passing in a casted & dereferenced pointer
-        log_debug("Animation - Index=%d, Length=%d\n", sprite->frameIndex, getLength(*(List*)animations));
-
+        
         // ==============================================================
         // == Check if there are more images to animate for our sprite ==
         // ==============================================================
-        if(sprite->frameIndex < getLength(*(List*)animations) - 1)
+        log("About to get animations list for %s\n", sprite->currentAnimation);
+        List* animList = (List*)animations;
+        log("List address: [%p]\n", animList);
+        char* string = toString(*animList);
+        log("%s\n", string);
+        free(string);
+
+
+        if(sprite->frameIndex < getLength(*animList) - 1)
             sprite->frameIndex++;
 
         // ========================================

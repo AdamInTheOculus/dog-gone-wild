@@ -25,8 +25,8 @@ void setupAnimations(AnimatedSprite* as, const char* name)
         as,             // AnimatedSprite
         name,           // Name of animation
         frameCount,     // # frames for animation
-        location,          // Start position
-        size,        // Size of each frame
+        location,       // Start position
+        size,           // Size of each frame
         offset          // Offset
     );
 }
@@ -89,6 +89,8 @@ void loop(Game* game, Input* input, Graphics* graphics)
         &animationDone
     );
 
+    log("Successfully created AnimatedSprite at address [%p]\n", &game->player);
+
     game->player.setupAnimations(&game->player, "runLeft");
     playAnimation(&game->player, "runLeft", false);
 
@@ -106,10 +108,17 @@ void loop(Game* game, Input* input, Graphics* graphics)
         // Calculate frame length
         int CURRENT_TIME_MS = SDL_GetTicks();
         int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
-
+        
+        log_debug("%s", "About to update frame ... ");
         update(game, MIN(ELAPSED_TIME_MS, MAX_FRAME_TIME));
+        log("%s", "Success updating.\n");
+
+        log_debug("%s", "About to draw frame ... ");
         draw(game, graphics);
+        log("%s", "Success drawing.\n");
+
         LAST_UPDATE_TIME = ELAPSED_TIME_MS;
+        log("End of loop at %d time.\n", LAST_UPDATE_TIME);
     }
 }
 
