@@ -54,6 +54,24 @@ void deleteHashTable(HashTable* ht)
     free(ht->entries);
 }
 
+void clearHashTable(HashTable* ht)
+{
+    if(ht == NULL)
+        return;
+
+    for(int i=0; i<ht->maxSize; i++)
+    {
+        Entry* entry = NULL;
+        entry = &ht->entries[i];
+
+        if(entry != NULL)
+        {
+            clearList(&entry->chain);
+            entry = NULL;
+        }
+    }
+}
+
 bool insertEntry(HashTable* ht, char* key, void* data)
 {
     if(ht == NULL || ht->maxSize <= 0) {

@@ -9,8 +9,8 @@ typedef struct Sprite {
     /** 
      * Each Sprite will have its own implementation of Update() and DeleteSprite()
     **/
-    void (*deleteSprite)(struct Sprite*);
-    void (*updateSprite)(struct Sprite*);
+    void (*delete)(struct Sprite*);
+    void (*update)(struct Sprite*);
     float x, y;
     SDL_Rect srcRect;
     SDL_Texture* spriteSheet;

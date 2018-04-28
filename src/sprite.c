@@ -16,8 +16,8 @@ Sprite createSprite(Graphics* g, char* filePath, int srcX, int srcY, int width, 
     //     log_error_exit("%s", "updateSprite(Sprite*) function is NULL.\n");
 
     Sprite s;
-    s.deleteSprite = deleteSprite;
-    s.updateSprite = updateSprite;
+    s.delete = deleteSprite;
+    s.update = updateSprite;
     s.srcRect.x = srcX;
     s.srcRect.y = srcY;
     s.srcRect.w = width;

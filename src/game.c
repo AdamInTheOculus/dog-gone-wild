@@ -51,7 +51,7 @@ void loop(Game* game, Input* input, Graphics* graphics)
         clearInput(input);
         updateInput(input);
 
-        // TODO: Safe shutdown when user requests to exit
+        // TODO: Safe shutdown when user wants to exit
         if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE) || wasExitRequested(input))
             return;
 
