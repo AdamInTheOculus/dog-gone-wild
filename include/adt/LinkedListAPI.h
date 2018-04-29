@@ -56,7 +56,7 @@ typedef struct iter{
 *@param deleteFunction function pointer to delete a single piece of data from the list
 *@param compareFunction function pointer to compare two nodes of the list in order to test for equality or order
 **/
-List initializeList(char* (*printFunction)(void* toBePrinted),void (*deleteFunction)(void* toBeDeleted),int (*compareFunction)(const void* first,const void* second));
+List* initializeList(char* (*printFunction)(void* toBePrinted),void (*deleteFunction)(void* toBeDeleted),int (*compareFunction)(const void* first,const void* second));
 
 
 
@@ -112,7 +112,7 @@ void* deleteDataFromList(List* list, const char* key);
  *@param the list struct
  *@return pointer to the data located at the head of the list
  **/
-void* getFromFront(List list);
+void* getFromFront(List* list);
 
 
 
@@ -121,7 +121,7 @@ void* getFromFront(List list);
  *@param the list struct
  *@return pointer to the data located at the tail of the list
  **/
-void* getFromBack(List list);
+void* getFromBack(List* list);
 
 
 
@@ -132,7 +132,7 @@ returned string must be freed by the calling function.
  *@param list Pointer to linked list dummy head.
  *@return on success: char * to string representation of list (must be freed after use).  on failure: NULL
  **/
-char* toString(List list);
+char* toString(List* list);
 
 
 
@@ -144,7 +144,7 @@ char* toString(List list);
  *@return The newly created iterator object.
  *@param list - a pointer to the list to iterate over.
 **/
-ListIterator createIterator(List list);
+ListIterator createIterator(List* list);
 
 
 

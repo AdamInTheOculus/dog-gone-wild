@@ -46,7 +46,7 @@ void deleteHashTable(HashTable* ht)
 
         if(entry != NULL)
         {
-            clearList(&entry->chain);
+            clearList(entry->chain);
             entry = NULL;
         }
     }
@@ -66,7 +66,7 @@ void clearHashTable(HashTable* ht)
 
         if(entry != NULL)
         {
-            clearList(&entry->chain);
+            clearList(entry->chain);
             entry = NULL;
         }
     }
@@ -96,7 +96,7 @@ bool insertEntry(HashTable* ht, const char* key, void* data)
         return false;
     }
 
-    insertBack(&ht->entries[hashValue].chain, data, key);
+    insertBack(ht->entries[hashValue].chain, data, key);
     ht->currentSize++;
     return true;
 }
@@ -112,7 +112,7 @@ void* getEntry(HashTable* ht, const char* key)
     }
 
     int hashValue = hash(key, ht->maxSize);
-    return findElement(ht->entries[hashValue].chain, key);
+    return findElement(*ht->entries[hashValue].chain, key);
 }
 
 void deleteEntry(HashTable* ht, const char* key)
@@ -130,15 +130,15 @@ void deleteEntry(HashTable* ht, const char* key)
     log_debug("Delete entry with value: %d\n", hashValue);
 
     // Find data element from LinkedList
-    void* data = findElement(ht->entries[hashValue].chain, key);
+    void* data = findElement(*ht->entries[hashValue].chain, key);
     if(data == NULL)
         return;
     
     // Delete node from entry chain
-    data = deleteDataFromList(&ht->entries[hashValue].chain, key);
+    data = deleteDataFromList(ht->entries[hashValue].chain, key);
 
     // Delete data from Data struct
-    ht->entries[hashValue].chain.deleteData(data);
+    ht->entries[hashValue].chain->deleteData(data);
     ht->currentSize--;
 }
 

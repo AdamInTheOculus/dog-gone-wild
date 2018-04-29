@@ -98,7 +98,7 @@ void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vect
     // ==========================================
     // == Generate a dynamic list of SDL_Rects ==
     // ==========================================
-    List rectangles = initializeList(&printRect, &deleteRect, &compareRects);
+    List* rectangles = initializeList(&printRect, &deleteRect, &compareRects);
     for (int i=0; i<frameCount; i++)
     {
         // SDL_Rect represents the location of a sprite (x,y) on a spritesheet (2D image).
@@ -111,17 +111,15 @@ void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vect
         newRect->y = position.y;
         newRect->w = size.x;
         newRect->h = size.y;
-        insertBack(&rectangles, (void*)newRect, name);
+        insertBack(rectangles, (void*)newRect, name);
     }
 
-    char* string = toString(rectangles);
-    log_debug("%s", string);
-    free(string);
+    log_debug("%s\n", toString(rectangles));
 
     // ============================================
     // == Attempt to insert animation rectangles ==
     // ============================================
-    if(insertEntry(&sprite->animations, name, &rectangles) == false)
+    if(insertEntry(&sprite->animations, name, rectangles) == false)
         log_error_exit("Failed to insert animation [%s] of %d frames.\n", name, frameCount);
 
     // ========================================
@@ -201,25 +199,19 @@ void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime)
     sprite->sprite.update(&sprite->sprite);
 
     sprite->timeElapsed += elapsedTime;
-    log("\nTime elapsed (%.2lf) vs. TimeToUpdate (%.2lf)\n",  sprite->timeElapsed, sprite->timeToUpdate);
     if(sprite->timeElapsed >= sprite->timeToUpdate)
     {
-        log("It's true for %s\n", sprite->currentAnimation);
+        sprite->timeElapsed -= sprite->timeToUpdate;
+
         void* animations = NULL;
         if((animations = getEntry(&sprite->animations, sprite->currentAnimation)) == NULL)
             log_error_exit("Failed to get animations for [%s].\n", sprite->currentAnimation);
-        
+
+        List* animList = (List*)animations;
+
         // ==============================================================
         // == Check if there are more images to animate for our sprite ==
         // ==============================================================
-        log("About to get animations list for %s\n", sprite->currentAnimation);
-        List* animList = (List*)animations;
-        log("List address: [%p]\n", animList);
-        char* string = toString(*animList);
-        log("%s\n", string);
-        free(string);
-
-
         if(sprite->frameIndex < getLength(*animList) - 1)
             sprite->frameIndex++;
 
@@ -250,18 +242,19 @@ void drawAnimatedSprite(Graphics* g, AnimatedSprite* sprite, Vector2 pos)
     if(sprite->visible == false)
         return;
 
-    // Retrieve offset Vector2 from table
-    void* offsetPtr = getEntry(&sprite->offsets, sprite->currentAnimation);
-    Vector2* offset = (Vector2*)offsetPtr;
+    // // Retrieve offset Vector2 from table
+    // void* offsetPtr = getEntry(&sprite->offsets, sprite->currentAnimation);
+    // Vector2* offset = (Vector2*)offsetPtr;
 
     // 
     SDL_Rect destRect;
-    destRect.x = pos.x + offset->x;
-    destRect.y = pos.y + offset->y;
+    destRect.x = pos.x;
+    destRect.y = pos.y;
     destRect.w = sprite->sprite.srcRect.w * SPRITE_SCALE;
     destRect.h = sprite->sprite.srcRect.h * SPRITE_SCALE;
 
     SDL_Rect* srcRect = getAnimationAtIndex(sprite);
+
     blitSurface(g, sprite->sprite.spriteSheet, srcRect, &destRect);
 }
 
@@ -280,7 +273,7 @@ SDL_Rect* getAnimationAtIndex(AnimatedSprite* sprite)
     // Reminder: `animations` is a LinkedList
     // Iterate through list until SDL_Rect is found
     int counter = 0;
-    ListIterator iter = createIterator(*animations);
+    ListIterator iter = createIterator(animations);
     void* element = NULL;
     while((element = nextElement(&iter)) != NULL)
     {
@@ -317,7 +310,11 @@ static char* printRect(void* toBePrinted)
     if((string = malloc(sizeof(char) * size)) == NULL)
         log_error_exit("Failed to allocate [%d] bytes.\n", size);
 
-    sprintf(string, "%s ==> printRect() - Not implemented.\n", __FILE__);
+    sprintf(string,
+        "SDL_Rect: x=%d, y=%d, w=%d, h=%d\n",
+        rect->x, rect->y, rect->w, rect->h
+    );
+
     return string;
 }
 

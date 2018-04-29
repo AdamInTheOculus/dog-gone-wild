@@ -17,9 +17,9 @@ void setupAnimations(AnimatedSprite* as, const char* name)
 {
     int frameCount = 3;
 
-    Vector2 location = {0,0};
-    Vector2 size = {16,16};
-    Vector2 offset = {0,0};
+    Vector2 location = {0, 62};
+    Vector2 size =     {20,24};
+    Vector2 offset =   {0, 0};
 
     addAnimation(
         as,             // AnimatedSprite
@@ -79,20 +79,20 @@ void loop(Game* game, Input* input, Graphics* graphics)
         graphics,
         "assets/sprites/ff6-sabin.png",
         3,             // # of animations a sprite has
-        1,60,          // Location in spritesheet
-        20,30,         // Size
+        3,62,          // Location in spritesheet
+        16,24,         // Size
         100,100,       // Position in game
-        50,            // timeToUpdate
+        7500,            // timeToUpdate
         &updateSprite,
         &deleteSprite,
         &setupAnimations,
         &animationDone
     );
 
-    log("Successfully created AnimatedSprite at address [%p]\n", &game->player);
-
+    log_debug("Successfully created AnimatedSprite at address [%p]\n", &game->player);
     game->player.setupAnimations(&game->player, "runLeft");
     playAnimation(&game->player, "runLeft", false);
+    log_debug("Successfully started playing animation %s.\n", game->player.currentAnimation);
 
     // Start of game loop
     int LAST_UPDATE_TIME = SDL_GetTicks();
@@ -109,16 +109,9 @@ void loop(Game* game, Input* input, Graphics* graphics)
         int CURRENT_TIME_MS = SDL_GetTicks();
         int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
         
-        log_debug("%s", "About to update frame ... ");
         update(game, MIN(ELAPSED_TIME_MS, MAX_FRAME_TIME));
-        log("%s", "Success updating.\n");
-
-        log_debug("%s", "About to draw frame ... ");
         draw(game, graphics);
-        log("%s", "Success drawing.\n");
-
         LAST_UPDATE_TIME = ELAPSED_TIME_MS;
-        log("End of loop at %d time.\n", LAST_UPDATE_TIME);
     }
 }
 

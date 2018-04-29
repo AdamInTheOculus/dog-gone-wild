@@ -4,7 +4,7 @@
 #include "LinkedListAPI.h"
 
 typedef struct Entry {
-    List chain; /* Handle collisions via chaining */
+    List* chain; /* Handle collisions via chaining */
 } Entry;
 
 typedef struct HashTable {

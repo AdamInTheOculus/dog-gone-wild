@@ -7,14 +7,14 @@
 
 #include "LinkedListAPI.h"
 
-List initializeList(char* (*printFunction)(void* toBePrinted),void (*deleteFunction)(void* toBeDeleted),int (*compareFunction)(const void* first,const void* second)){
-    List list;
-    list.head = NULL;
-    list.tail = NULL;
-    list.length = 0;
-    list.printData = printFunction;
-    list.compare = compareFunction;
-    list.deleteData = deleteFunction;
+List* initializeList(char* (*printFunction)(void* toBePrinted),void (*deleteFunction)(void* toBeDeleted),int (*compareFunction)(const void* first,const void* second)){
+    List* list = malloc(sizeof(List));
+    list->head = NULL;
+    list->tail = NULL;
+    list->length = 0;
+    list->printData = printFunction;
+    list->compare = compareFunction;
+    list->deleteData = deleteFunction;
     return list;
 }
 
@@ -39,6 +39,7 @@ void clearList(List* list){
     
     list->head = NULL;
     list->tail = NULL;
+    free(list);
 }
 
 Node* initializeNode(void* data, const char* key){
@@ -78,22 +79,22 @@ void insertBack(List* list, void* toBeAdded, const char* key){
     
 }
 
-void* getFromFront(List list){
+void* getFromFront(List* list){
     
-    if (list.head == NULL){
+    if (list->head == NULL){
         return NULL;
     }
     
-    return list.head->data;
+    return list->head->data;
 }
 
-void* getFromBack(List list){
+void* getFromBack(List* list){
     
-    if (list.tail == NULL){
+    if (list->tail == NULL){
         return NULL;
     }
     
-    return list.tail->data;
+    return list->tail->data;
     
 }
 
@@ -134,7 +135,7 @@ void* deleteDataFromList(List* list, const char* key){
     return NULL;
 }
 
-char* toString(List list){
+char* toString(List* list){
     ListIterator iter = createIterator(list);
     char* str;
         
@@ -143,7 +144,7 @@ char* toString(List list){
     
     void* elem;
     while( (elem = nextElement(&iter)) != NULL){
-        char* currDescr = list.printData(elem);
+        char* currDescr = list->printData(elem);
         int newLen = strlen(str)+50+strlen(currDescr);
         str = (char*)realloc(str, newLen);
         strcat(str, "\n"); 
@@ -155,10 +156,10 @@ char* toString(List list){
     return str;
 }
 
-ListIterator createIterator(List list){
+ListIterator createIterator(List* list){
     ListIterator iter;
     
-    iter.current = list.head;
+    iter.current = list->head;
     
     return iter;
 }
