@@ -114,8 +114,6 @@ void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vect
         insertBack(rectangles, (void*)newRect, name);
     }
 
-    log_debug("%s\n", toString(rectangles));
-
     // ============================================
     // == Attempt to insert animation rectangles ==
     // ============================================
@@ -130,6 +128,8 @@ void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vect
     _offset->y = offset.y;
     if(insertEntry(&sprite->offsets, name, (void*)_offset) == false)
         log_error_exit("Failed to insert offset of animation [%s].\n", name);
+
+    log_debug("Added animation [%s] to animated sprite [%p].\n", name, sprite);
 }
 
 /**

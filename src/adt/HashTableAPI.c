@@ -87,7 +87,6 @@ bool insertEntry(HashTable* ht, const char* key, void* data)
 
     // Get hashcode from key and insert into entry chain
     int hashValue = hash(key, ht->maxSize);
-    log_debug("Hashing entry with value: %d\n", hashValue);
 
     // Check if node with key already exists
     if(getEntry(ht, key) != NULL)
@@ -127,7 +126,6 @@ void deleteEntry(HashTable* ht, const char* key)
 
     // Get hashcode from key
     int hashValue = hash(key, ht->maxSize);
-    log_debug("Delete entry with value: %d\n", hashValue);
 
     // Find data element from LinkedList
     void* data = findElement(*ht->entries[hashValue].chain, key);

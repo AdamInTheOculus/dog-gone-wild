@@ -113,21 +113,14 @@ void loop(Game* game, Input* input, Graphics* graphics)
         if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE) || wasExitRequested(input))
             return;
 
-        if(wasKeyPressed(input, SDL_SCANCODE_S) && wasKeyPressed(input, SDL_SCANCODE_A))
+        else if(isKeyHeld(input, SDL_SCANCODE_S))
             playAnimation(&game->player, "crouchLeft", false);
 
-        if(wasKeyPressed(input, SDL_SCANCODE_D))
+        else if(wasKeyPressed(input, SDL_SCANCODE_D))
             playAnimation(&game->player, "walkRight", false);
 
-        if(wasKeyPressed(input, SDL_SCANCODE_A))
+        else if(wasKeyPressed(input, SDL_SCANCODE_A))
             playAnimation(&game->player, "walkLeft", false);
-
-        if(wasKeyPressed(input, SDL_SCANCODE_S))
-            playAnimation(&game->player, "crouchRight", false);
-
-        if(wasKeyReleased(input, SDL_SCANCODE_S))
-            playAnimation(&game->player, "walkRight", false);
-        
 
         // Calculate frame length
         int CURRENT_TIME_MS = SDL_GetTicks();
