@@ -13,7 +13,7 @@ void animationDone(char* animation)
     return;
 }
 
-void setupAnimations(AnimatedSprite* as, const char* name)
+void setupAnimations(AnimatedSprite* as)
 {
     int frameCount = 4;
 
@@ -26,6 +26,17 @@ void setupAnimations(AnimatedSprite* as, const char* name)
     Vector2 right_size = left_size;
     Vector2 right_offset = left_offset;
     addAnimation(as, "walkRight", frameCount, right_location, right_size, right_offset);
+
+    Vector2 crouch_left_location = {110, 140};
+    Vector2 crouch_left_size = {20, 20};
+    Vector2 crouch_left_offset = {0, 0};
+    addAnimation(as, "crouchLeft", 1, crouch_left_location, crouch_left_size, crouch_left_offset);
+
+    Vector2 crouch_right_location = {110, 120};
+    Vector2 crouch_right_size = {20, 20};
+    Vector2 crouch_right_offset = {0, 0};
+    addAnimation(as, "crouchRight", 1, crouch_right_location, crouch_right_size, crouch_right_offset);
+
 }
 
 void updateSprite()
@@ -87,7 +98,7 @@ void loop(Game* game, Input* input, Graphics* graphics)
     );
 
     log_debug("AnimatedSprite at address: [%p]\n", &game->player);
-    game->player.setupAnimations(&game->player, "runLeft");
+    game->player.setupAnimations(&game->player);
     playAnimation(&game->player, "walkRight", false);
     log_debug("Playing animation: [%s]\n", game->player.currentAnimation);
 
@@ -101,6 +112,22 @@ void loop(Game* game, Input* input, Graphics* graphics)
         // TODO: Safe shutdown when user wants to exit
         if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE) || wasExitRequested(input))
             return;
+
+        if(wasKeyPressed(input, SDL_SCANCODE_S) && wasKeyPressed(input, SDL_SCANCODE_A))
+            playAnimation(&game->player, "crouchLeft", false);
+
+        if(wasKeyPressed(input, SDL_SCANCODE_D))
+            playAnimation(&game->player, "walkRight", false);
+
+        if(wasKeyPressed(input, SDL_SCANCODE_A))
+            playAnimation(&game->player, "walkLeft", false);
+
+        if(wasKeyPressed(input, SDL_SCANCODE_S))
+            playAnimation(&game->player, "crouchRight", false);
+
+        if(wasKeyReleased(input, SDL_SCANCODE_S))
+            playAnimation(&game->player, "walkRight", false);
+        
 
         // Calculate frame length
         int CURRENT_TIME_MS = SDL_GetTicks();

@@ -107,7 +107,7 @@ void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vect
             log_error_exit("Failed to dynamically allocate SDL_Rect for [%s] animation.\n", name);
 
 
-        newRect->x = (i + position.x) * size.x;
+        newRect->x = size.x * i + position.x;
         newRect->y = position.y;
         newRect->w = size.x;
         newRect->h = size.y;
