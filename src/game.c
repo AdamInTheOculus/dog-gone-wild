@@ -15,20 +15,17 @@ void animationDone(char* animation)
 
 void setupAnimations(AnimatedSprite* as, const char* name)
 {
-    int frameCount = 3;
+    int frameCount = 4;
 
-    Vector2 location = {0, 62};
-    Vector2 size =     {20,24};
-    Vector2 offset =   {0, 0};
+    Vector2 left_location = {0, 60};
+    Vector2 left_size =     {20,24};
+    Vector2 left_offset =   {0, 0};
+    addAnimation(as, "walkLeft", frameCount, left_location, left_size, left_offset);
 
-    addAnimation(
-        as,             // AnimatedSprite
-        name,           // Name of animation
-        frameCount,     // # frames for animation
-        location,       // Start position
-        size,           // Size of each frame
-        offset          // Offset
-    );
+    Vector2 right_location = {0, 90};
+    Vector2 right_size = left_size;
+    Vector2 right_offset = left_offset;
+    addAnimation(as, "walkRight", frameCount, right_location, right_size, right_offset);
 }
 
 void updateSprite()
@@ -78,21 +75,21 @@ void loop(Game* game, Input* input, Graphics* graphics)
     game->player = createAnimatedSprite(
         graphics,
         "assets/sprites/ff6-sabin.png",
-        3,             // # of animations a sprite has
+        4,             // # of animations a sprite has
         3,62,          // Location in spritesheet
         16,24,         // Size
         100,100,       // Position in game
-        7500,            // timeToUpdate
+        8000,            // timeToUpdate
         &updateSprite,
         &deleteSprite,
         &setupAnimations,
         &animationDone
     );
 
-    log_debug("Successfully created AnimatedSprite at address [%p]\n", &game->player);
+    log_debug("AnimatedSprite at address: [%p]\n", &game->player);
     game->player.setupAnimations(&game->player, "runLeft");
-    playAnimation(&game->player, "runLeft", false);
-    log_debug("Successfully started playing animation %s.\n", game->player.currentAnimation);
+    playAnimation(&game->player, "walkRight", false);
+    log_debug("Playing animation: [%s]\n", game->player.currentAnimation);
 
     // Start of game loop
     int LAST_UPDATE_TIME = SDL_GetTicks();

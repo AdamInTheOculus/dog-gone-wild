@@ -344,7 +344,7 @@ static char* printVector2(void* toBePrinted)
     if(toBePrinted == NULL)
         return NULL;
 
-    Vector2* vec2 = (Vector2*)toBePrinted;
+    // Vector2* vec2 = (Vector2*)toBePrinted;
 
     int size = 40;
     char* string = NULL;
