@@ -30,7 +30,7 @@ AnimatedSprite createAnimatedSprite(
     void (*deleteSprite)(Sprite*),
     void (*updateSprite)(Sprite*),
     void (*setupAnimations)(),
-    void (*doneAnimation)(char* animation)
+    void (*doneAnimation)(char* animation) // Logic that happens after animation is complete.
 ){
     // ====================================
     // == Validate all pointer arguments ==
@@ -103,8 +103,9 @@ void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vect
     {
         // SDL_Rect represents the location of a sprite (x,y) on a spritesheet (2D image).
         SDL_Rect* newRect = NULL;
-        if((newRect = malloc(sizeof(SDL_Rect))) == NULL)
+        if((newRect = malloc(sizeof(SDL_Rect))) == NULL) {
             log_error_exit("Failed to dynamically allocate SDL_Rect for [%s] animation.\n", name);
+        }
 
 
         newRect->x = size.x * i + position.x;
@@ -117,8 +118,9 @@ void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vect
     // ============================================
     // == Attempt to insert animation rectangles ==
     // ============================================
-    if(insertEntry(&sprite->animations, name, rectangles) == false)
+    if(insertEntry(&sprite->animations, name, rectangles) == false) {
         log_error_exit("Failed to insert animation [%s] of %d frames.\n", name, frameCount);
+    }
 
     // ========================================
     // == Attempt to insert animation offset ==
@@ -126,8 +128,10 @@ void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vect
     Vector2* _offset = malloc(sizeof(Vector2));
     _offset->x = offset.x;
     _offset->y = offset.y;
-    if(insertEntry(&sprite->offsets, name, (void*)_offset) == false)
+
+    if(insertEntry(&sprite->offsets, name, (void*)_offset) == false) {
         log_error_exit("Failed to insert offset of animation [%s].\n", name);
+    }
 
     log_debug("Added animation [%s] to animated sprite [%p].\n", name, sprite);
 }
@@ -137,8 +141,9 @@ void addAnimation(AnimatedSprite* sprite, const char* name, int frameCount, Vect
 **/
 void resetAnimations(AnimatedSprite* sprite)
 {
-    if(sprite == NULL)
+    if(sprite == NULL) {
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
+    }
 
     clearHashTable(&sprite->animations);
     clearHashTable(&sprite->offsets);
@@ -149,14 +154,13 @@ void resetAnimations(AnimatedSprite* sprite)
 **/
 void playAnimation(AnimatedSprite* sprite, char* animation, bool playOnce)
 {
-    if(sprite == NULL)
+    if(sprite == NULL) 
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
     if(animation == NULL || strlen(animation) < 1)
         log_error_exit("%s", "Animation string is either NULL or empty.\n");
 
     sprite->currentAnimationOnce = playOnce;
-    if(strcmp(sprite->currentAnimation, animation) != 0)
-    {
+    if(strcmp(sprite->currentAnimation, animation) != 0) {
         strcpy(sprite->currentAnimation, animation);
         sprite->frameIndex = 0;
     }
@@ -167,8 +171,9 @@ void playAnimation(AnimatedSprite* sprite, char* animation, bool playOnce)
 **/
 void stopAnimation(AnimatedSprite* sprite)
 {
-    if(sprite == NULL)
+    if(sprite == NULL) {
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
+    }
 
     sprite->frameIndex = 0;
     sprite->doneAnimation(sprite->currentAnimation);
@@ -179,8 +184,9 @@ void stopAnimation(AnimatedSprite* sprite)
 **/
 void setAnimationVisible(AnimatedSprite* sprite, bool visibility)
 {
-    if(sprite == NULL)
+    if(sprite == NULL) {
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
+    }
 
     sprite->visible = visibility;
 }
@@ -190,15 +196,16 @@ void setAnimationVisible(AnimatedSprite* sprite, bool visibility)
 **/
 void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime)
 {
-    if(sprite == NULL)
+    if(sprite == NULL) {
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
+    }
 
     // ========================================
     // == Update Sprite and time that passed ==
     // ========================================
     sprite->sprite.update(&sprite->sprite);
-
     sprite->timeElapsed += elapsedTime;
+
     if(sprite->timeElapsed >= sprite->timeToUpdate)
     {
         sprite->timeElapsed -= sprite->timeToUpdate;

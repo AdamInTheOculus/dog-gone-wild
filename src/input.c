@@ -44,8 +44,7 @@ void updateInput(Input* input)
 
         else if(e.type == SDL_KEYDOWN)
         {
-            if(e.key.repeat == 0)
-                keyDownEvent(input, e);
+            keyDownEvent(input, e);
         }
     }
 }

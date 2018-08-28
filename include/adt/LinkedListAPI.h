@@ -134,6 +134,15 @@ returned string must be freed by the calling function.
  **/
 char* toString(List* list);
 
+/** Returns an int that indicates the index position within a list.
+ *@pre List must exist and have at least one element.
+ *@pre char* must exist and have at least one character.
+ *@param List List you want to compare against.
+ *@param key Used to compare against all other nodes.
+ *@return int index of linked list
+ **/
+int getIndex(List* list, const char* key);
+
 
 
 /** Function for creating an iterator for the linked list. 

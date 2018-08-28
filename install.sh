@@ -5,19 +5,19 @@ if [ "$(uname)" = "Linux" ]; then
 
     echo "Linux-GNU system."
     echo "Installing SDL2 onto computer ..."
-    sudo apt-get install libsdl2-2.0
+    sudo apt-get install libsdl2-2.0 libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
     clear
-    echo "Installing SDL2 development tools onto computer ..."
-    sudo apt-get install libsdl2-dev
-    clear
-    echo "Installing SDL2 image tools onto computer ..."
-    sudo apt-get install libsdl2-image-dev
-    clear
-    echo "Installing SDL2 True Type Font tools onto computer ..."
-    sudo apt-get install libsdl2-ttf-dev
-    clear
-    echo "Installing SDL2 mixer tools onto computer ..."
-    sudo apt-get install libsdl2-mixer-dev
+    # echo "Installing SDL2 development tools onto computer ..."
+    # sudo apt-get install libsdl2-dev
+    # clear
+    # echo "Installing SDL2 image tools onto computer ..."
+    # sudo apt-get install libsdl2-image-dev
+    # clear
+    # echo "Installing SDL2 True Type Font tools onto computer ..."
+    # sudo apt-get install libsdl2-ttf-dev
+    # clear
+    # echo "Installing SDL2 mixer tools onto computer ..."
+    # sudo apt-get install libsdl2-mixer-dev
     clear
     echo "Successfully installed all required software."
 

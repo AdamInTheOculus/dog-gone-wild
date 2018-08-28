@@ -189,7 +189,7 @@ int getLength (List list){
         counter++;
         current = current->next;
     }
-    list.length = counter;;
+    list.length = counter;
     return list.length;
 
 }
@@ -209,4 +209,30 @@ void* findElement(List list, const char* key){
     }
 
    return NULL;
+}
+
+/** Returns an int that indicates the index position within a list.
+ *@pre List must exist and have at least one element.
+ *@pre char* must exist and have at least one character.
+ *@param List List you want to compare against.
+ *@param key Used to compare against all other nodes.
+ *@return int index of linked list
+ **/
+int getIndex(List* list, const char* key)
+{
+    if(list == NULL || key == NULL || strlen(key) < 1)
+        return -1;
+    
+    int counter = 0;
+    Node* current = list->head;
+
+    while(current != NULL){
+        if(strcmp(current->key, key) == 0){
+            return counter;
+        }
+        current = current->next;
+        counter++;
+    }
+
+    return -1;
 }

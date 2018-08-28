@@ -5,8 +5,8 @@
 #include "graphics.h"
 #include "input.h"
 
-#define FPS 50
-#define MAX_FRAME_TIME (5 * 1000) / FPS
+#define FPS 60
+#define MAX_FRAME_TIME (FPS * 100) / FPS
 #define MIN(a, b) (((a) > (b)) ? (b) : (a))
 
 typedef struct Game {
@@ -22,8 +22,8 @@ typedef struct Game {
 Game initializeGame();
 void destroyGame(Game* game);
 void runGame(Game* game);
-void loop(Game* game, Input* input, Graphics* graphics);
-void draw(Game* game , Graphics* graphics);
-void update(Game* game, float elapsedTime);
+void loopGame(Game* game, Input* input, Graphics* graphics);
+void drawGame(Game* game , Graphics* graphics);
+void updateGame(Game* game, float elapsedTime);
 
 #endif

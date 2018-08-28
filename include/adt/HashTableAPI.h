@@ -18,6 +18,7 @@ void deleteHashTable(HashTable* table);
 void clearHashTable(HashTable* ht);
 bool insertEntry(HashTable* ht, const char* key, void* data);
 void deleteEntry(HashTable* ht, const char* key);
+int getKeyIndex(HashTable* ht, const char* key);
 void* getEntry(HashTable* ht, const char* key);
 
 #endif

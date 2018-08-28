@@ -26,10 +26,7 @@ HashTable initializeHashTable(int size, char* (*printFunction)(void* toBePrinted
 
     // For each entry, initialize the chain
     for(int i=0; i<ht.maxSize; i++)
-    {
         ht.entries[i].chain = initializeList(printFunction, deleteFunction, compareFunction);
-        //log_debug("List address: %p\n", &ht.entries[i].chain);
-    }
 
     return ht;
 }
@@ -138,6 +135,15 @@ void deleteEntry(HashTable* ht, const char* key)
     // Delete data from Data struct
     ht->entries[hashValue].chain->deleteData(data);
     ht->currentSize--;
+}
+
+int getKeyIndex(HashTable* ht, const char* key)
+{
+    if(ht == NULL || key == NULL || strlen(key) < 1)
+        return -1;
+
+    int hashCode = hash(key, ht->maxSize);
+    return getIndex(ht->entries[hashCode].chain, key);
 }
 
 /** 
