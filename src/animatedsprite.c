@@ -200,6 +200,12 @@ void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime)
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
     }
 
+    // ===========================
+    // == Update last animation ==
+    // ===========================
+    strcpy(sprite->lastAnimation, sprite->currentAnimation);
+    log_debug("Last animation: %s\n", sprite->lastAnimation);
+
     // ========================================
     // == Update Sprite and time that passed ==
     // ========================================
@@ -211,8 +217,9 @@ void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime)
         sprite->timeElapsed -= sprite->timeToUpdate;
 
         void* animations = NULL;
-        if((animations = getEntry(&sprite->animations, sprite->currentAnimation)) == NULL)
+        if((animations = getEntry(&sprite->animations, sprite->currentAnimation)) == NULL) {
             log_error_exit("Failed to get animations for [%s].\n", sprite->currentAnimation);
+        }
 
         List* animList = (List*)animations;
 
@@ -227,8 +234,9 @@ void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime)
         // ========================================
         else
         {
-            if(sprite->currentAnimationOnce)
+            if(sprite->currentAnimationOnce) {
                 setAnimationVisible(sprite, false);
+            }
 
             sprite->frameIndex = 0;
             sprite->doneAnimation(sprite->currentAnimation);
@@ -241,13 +249,16 @@ void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime)
 **/
 void drawAnimatedSprite(Graphics* g, AnimatedSprite* sprite, Vector2 pos)
 {
-    if(g == NULL)
+    if(g == NULL) {
         log_error_exit("%s", "Graphics pointer is NULL.\n");
-    if(sprite == NULL)
+    } else if(sprite == NULL) {
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
+    }
 
-    if(sprite->visible == false)
+
+    if(sprite->visible == false) {
         return;
+    }
 
     // // Retrieve offset Vector2 from table
     // void* offsetPtr = getEntry(&sprite->offsets, sprite->currentAnimation);
@@ -270,8 +281,9 @@ void drawAnimatedSprite(Graphics* g, AnimatedSprite* sprite, Vector2 pos)
 **/
 SDL_Rect* getAnimationAtIndex(AnimatedSprite* sprite)
 {
-    if(sprite == NULL)
+    if(sprite == NULL) {
         log_error_exit("%s", "AnimatedSprite pointer is NULL.\n");
+    }
 
     // Get animation list from HashTable
     void* entry = getEntry(&sprite->animations, sprite->currentAnimation);
@@ -284,8 +296,9 @@ SDL_Rect* getAnimationAtIndex(AnimatedSprite* sprite)
     void* element = NULL;
     while((element = nextElement(&iter)) != NULL)
     {
-        if(counter == sprite->frameIndex)
+        if(counter == sprite->frameIndex) {
             return (SDL_Rect*)element;
+        }
 
         counter++;
     }
@@ -306,16 +319,18 @@ SDL_Rect* getAnimationAtIndex(AnimatedSprite* sprite)
 **/
 static char* printRect(void* toBePrinted)
 { 
-    if(toBePrinted == NULL)
+    if(toBePrinted == NULL) {
         return NULL;
+    }
 
     SDL_Rect* rect = (SDL_Rect*)toBePrinted;
 
     int size = 40;
     char* string = NULL;
 
-    if((string = malloc(sizeof(char) * size)) == NULL)
+    if((string = malloc(sizeof(char) * size)) == NULL) {
         log_error_exit("Failed to allocate [%d] bytes.\n", size);
+    }
 
     sprintf(string,
         "SDL_Rect: x=%d, y=%d, w=%d, h=%d\n",
@@ -332,8 +347,9 @@ static int compareRects(const void* first, const void* second)
 
 static void deleteRect(void* toBeDeleted)
 {
-    if(toBeDeleted == NULL)
+    if(toBeDeleted == NULL) {
         return;
+    }
 
     SDL_Rect* rect = (SDL_Rect*)toBeDeleted;
     free(rect);
@@ -348,16 +364,18 @@ static void deleteRect(void* toBeDeleted)
 **/
 static char* printVector2(void* toBePrinted)
 {
-    if(toBePrinted == NULL)
+    if(toBePrinted == NULL) {
         return NULL;
+    }
 
     // Vector2* vec2 = (Vector2*)toBePrinted;
 
     int size = 40;
     char* string = NULL;
 
-    if((string = malloc(sizeof(char) * size)) == NULL)
+    if((string = malloc(sizeof(char) * size)) == NULL) {
         log_error_exit("Failed to allocate [%d] bytes.\n", size);
+    }
 
     sprintf(string, "%s ==> printVector2() - Not implemented.\n", __FILE__);
     return string;
@@ -365,8 +383,9 @@ static char* printVector2(void* toBePrinted)
 
 static void deleteVector2(void* toBeDeleted)
 {
-    if(toBeDeleted == NULL)
+    if(toBeDeleted == NULL) {
         return;
+    }
 
     Vector2* vec2 = (Vector2*)toBeDeleted;
     free(vec2);

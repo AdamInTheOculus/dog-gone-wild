@@ -25,6 +25,7 @@ typedef struct AnimatedSprite {
     bool visible;               // Indicates if animation is visible.
     bool currentAnimationOnce;  // Current animation will either run once or loop.
     char currentAnimation[50];  // ID of current animation playing.
+    char lastAnimation[50];     // ID of last animation played.
 
     void (*setupAnimations)();
     void (*doneAnimation)(char* animation);

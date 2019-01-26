@@ -37,6 +37,9 @@ void setupAnimations(AnimatedSprite* as)
     Vector2 crouch_right_offset = {0, 0};
     addAnimation(as, "crouchRight", 1, crouch_right_location, crouch_right_size, crouch_right_offset);
 
+    // Set animation to idle position
+    strcpy(as->currentAnimation, "walkRight");
+    strcpy(as->lastAnimation, "");
 }
 
 void updateSprite()
@@ -61,11 +64,6 @@ Game initializeGame(int width, int height)
     game.height = height;
     game.graphics = initializeGraphics(game.width, game.height);
     game.input = initializeInput();
-
-    // TODO:
-    // game.assets = initializeAssets();
-    // game.animations = initializeAnimations(game.assets);
-
     game.player = createAnimatedSprite(
         &game.graphics,
         "assets/sprites/ff6-sabin.png",
@@ -89,8 +87,6 @@ void destroyGame(Game* game)
         log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
     }
 
-    // destroyAnimations(&game->assets)
-    // destroyAssets(&game->assets);
     destroyInput(&game->input);
     destroyGraphics(&game->graphics);
     SDL_Quit();
@@ -103,19 +99,15 @@ void runGame(Game* game)
 
 void loopGame(Game* game, Input* input, Graphics* graphics)
 {
-    if(input == NULL)
+    if(input == NULL) {
         log_error_exit("Input is NULL. %s\n", SDL_GetError());
+    }
 
-    // ==================================================
-    // == Initialization phase before game loop starts ==
-    // ==================================================
-
+    // ===================================================
+    // == Initialize animations before game loop starts ==
+    // ===================================================
     game->player.setupAnimations(&game->player);
-    playAnimation(&game->player, "walkRight", false);
 
-    // Start of game loop
-    char* lastAnimation = "";
-    
     // Keep track of time
     double currentTime = SDL_GetTicks();
 
@@ -125,21 +117,16 @@ void loopGame(Game* game, Input* input, Graphics* graphics)
         double deltaTime = newTime - currentTime;
         currentTime = newTime;
 
-        clearInput(input);
-        updateInput(input);
-        // updatePlayer(input, game);
-        lastAnimation = game->player.currentAnimation;
-
         // TODO: Safe shutdown when user wants to exit
         if(wasKeyPressed(input, SDL_SCANCODE_ESCAPE) || wasExitRequested(input)) {
             return;
         }
 
-        else if(wasKeyPressed(input, SDL_SCANCODE_W)) {
+        else if(isKeyHeld(input, SDL_SCANCODE_S) && isKeyHeld(input, SDL_SCANCODE_D)) {
             playAnimation(&game->player, "crouchRight", false);
         }
 
-        else if(wasKeyPressed(input, SDL_SCANCODE_S)) {
+        else if(isKeyHeld(input, SDL_SCANCODE_S) && isKeyHeld(input, SDL_SCANCODE_A)) {
             playAnimation(&game->player, "crouchLeft", false);
         }
 
@@ -155,9 +142,20 @@ void loopGame(Game* game, Input* input, Graphics* graphics)
             playAnimation(&game->player, game->player.currentAnimation, false);
         }
 
-        updateGame(game, MIN(deltaTime, MAX_FRAME_TIME));
+        updateGame(game, input, MIN(deltaTime, MAX_FRAME_TIME));
         drawGame(game, graphics);
     }
+}
+
+void updateGame(Game* game, Input* input, float elapsedTime)
+{
+    if(game == NULL) {
+        log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
+    }
+
+    updateInput(input);
+    updateAnimatedSprite(&game->player, elapsedTime);
+    return;
 }
 
 void drawGame(Game* game, Graphics* graphics)
@@ -171,14 +169,4 @@ void drawGame(Game* game, Graphics* graphics)
     Vector2 location = {100, 100};
     drawAnimatedSprite(graphics, &game->player, location);
     renderGraphics(graphics);
-}
-
-void updateGame(Game* game, float elapsedTime)
-{
-    if(game == NULL) {
-        log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
-    }
-
-    updateAnimatedSprite(&game->player, elapsedTime);
-    return;
 }

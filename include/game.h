@@ -23,7 +23,7 @@ Game initializeGame();
 void destroyGame(Game* game);
 void runGame(Game* game);
 void loopGame(Game* game, Input* input, Graphics* graphics);
-void drawGame(Game* game , Graphics* graphics);
-void updateGame(Game* game, float elapsedTime);
+void updateGame(Game* game, Input* input, float elapsedTime);
+void drawGame(Game* game, Graphics* graphics);
 
 #endif

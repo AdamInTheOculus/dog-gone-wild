@@ -1,6 +1,6 @@
 /**
  * @file LinkedListAPI.h
- * @author CIS*2750 F17 (based on the ListADT from CIS*2520, S17)
+ * @author Written by Jovana Kusic; used with permission.
  * @date September 2017
  * @brief File containing the function definitions of a doubly linked list
  */

@@ -33,19 +33,18 @@ void destroyInput(Input* input)
 
 void updateInput(Input* input)
 {
+
+    clearInput(input);
+
     SDL_Event e;
     if(SDL_PollEvent(&e))
     {
         if(e.type == SDL_QUIT)
             input->exitRequested = true;
-
         else if(e.type == SDL_KEYUP)
             keyUpEvent(input, e);
-
         else if(e.type == SDL_KEYDOWN)
-        {
             keyDownEvent(input, e);
-        }
     }
 }
 
