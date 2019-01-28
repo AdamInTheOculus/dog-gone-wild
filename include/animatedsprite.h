@@ -22,6 +22,7 @@ typedef struct AnimatedSprite {
     int frameIndex;             // What frame we're currently at
     double timeElapsed;         // Indicates how far into the animation we are
     double timeToUpdate;        // Indicates how long to render each sprite
+    bool facingLeft;
     bool visible;               // Indicates if animation is visible.
     bool currentAnimationOnce;  // Current animation will either run once or loop.
     char currentAnimation[50];  // ID of current animation playing.

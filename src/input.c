@@ -8,13 +8,9 @@
 #include "input.h"
 #include "debug.h"
 
-#define KEY_COUNT 50
-#define KEY_STATE_COUNT 3
-
 Input initializeInput()
 {
     Input i;
-    i.keycode = malloc(sizeof(bool*) * KEY_COUNT);
     i.size = KEY_COUNT;
     i.exitRequested = false;
     clearInput(&i);
@@ -26,25 +22,22 @@ void destroyInput(Input* input)
     if(input == NULL)
         log_error_exit("`input` pointer [%p] is NULL.\n", input);
 
-    free(input->keycode);
-    input->keycode = NULL;
     return;
 }
 
 void updateInput(Input* input)
 {
 
-    clearInput(input);
-
     SDL_Event e;
-    if(SDL_PollEvent(&e))
+    while(SDL_PollEvent(&e))
     {
-        if(e.type == SDL_QUIT)
+        if(e.type == SDL_QUIT) {
             input->exitRequested = true;
-        else if(e.type == SDL_KEYUP)
+        } else if(e.type == SDL_KEYUP) {
             keyUpEvent(input, e);
-        else if(e.type == SDL_KEYDOWN)
+        } else if(e.type == SDL_KEYDOWN) {
             keyDownEvent(input, e);
+        }
     }
 }
 
@@ -62,14 +55,16 @@ void clearInput(Input* input)
  
 void keyUpEvent(Input* input, SDL_Event e)
 {
-    input->keycode[RELEASED_KEY][e.key.keysym.scancode] = true;
+    input->keycode[PRESSED_KEY][e.key.keysym.scancode] = false;
     input->keycode[HELD_KEY][e.key.keysym.scancode] = false;
+    input->keycode[RELEASED_KEY][e.key.keysym.scancode] = true;
 }
 
 void keyDownEvent(Input* input, SDL_Event e)
 {
     input->keycode[PRESSED_KEY][e.key.keysym.scancode] = true;
     input->keycode[HELD_KEY][e.key.keysym.scancode] = true;
+    input->keycode[RELEASED_KEY][e.key.keysym.scancode] = false;
 }
 
 bool wasKeyPressed(const Input* input, SDL_Scancode key)

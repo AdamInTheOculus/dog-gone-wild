@@ -87,6 +87,8 @@ void destroyGame(Game* game)
         log_error_exit("Game pointer is NULL. %s\n", SDL_GetError());
     }
 
+    printf("Destroying game ... was exit requested? [%d]\n", game->input.exitRequested);
+
     destroyInput(&game->input);
     destroyGraphics(&game->graphics);
     SDL_Quit();
@@ -115,6 +117,11 @@ void loopGame(Game* game, Input* input, Graphics* graphics)
     {
         double newTime = SDL_GetTicks();
         double deltaTime = newTime - currentTime;
+        if(deltaTime < 13) {
+            continue;
+        }
+
+        printf("Delta time: %.2f\n", deltaTime);
         currentTime = newTime;
 
         // TODO: Safe shutdown when user wants to exit
@@ -123,23 +130,38 @@ void loopGame(Game* game, Input* input, Graphics* graphics)
         }
 
         else if(isKeyHeld(input, SDL_SCANCODE_S) && isKeyHeld(input, SDL_SCANCODE_D)) {
+            game->player.facingLeft = false;
             playAnimation(&game->player, "crouchRight", false);
         }
 
         else if(isKeyHeld(input, SDL_SCANCODE_S) && isKeyHeld(input, SDL_SCANCODE_A)) {
+            game->player.facingLeft = true;
             playAnimation(&game->player, "crouchLeft", false);
         }
 
-        else if(wasKeyPressed(input, SDL_SCANCODE_D)) {
+        else if(isKeyHeld(input, SDL_SCANCODE_D)) {
+            game->player.facingLeft = false;
             playAnimation(&game->player, "walkRight", false);
         }
 
-        else if(wasKeyPressed(input, SDL_SCANCODE_A)) {
+        else if(isKeyHeld(input, SDL_SCANCODE_A)) {
+            game->player.facingLeft = true;
             playAnimation(&game->player, "walkLeft", false);
         }
 
+        else if(isKeyHeld(input, SDL_SCANCODE_S)) {
+            if(game->player.facingLeft)
+                playAnimation(&game->player, "crouchLeft", false);
+            else
+                playAnimation(&game->player, "crouchRight", false);
+        }
+
+        // TODO: Create idle animation
         else {
-            playAnimation(&game->player, game->player.currentAnimation, false);
+            if(game->player.facingLeft)
+                playAnimation(&game->player, "walkLeft", false);
+            else
+                playAnimation(&game->player, "walkRight", false);
         }
 
         updateGame(game, input, MIN(deltaTime, MAX_FRAME_TIME));

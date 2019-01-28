@@ -5,12 +5,15 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define KEY_COUNT 200
+#define KEY_STATE_COUNT 3
+
 #define PRESSED_KEY 0
 #define RELEASED_KEY 1
 #define HELD_KEY 2
 
 typedef struct Input {
-    bool (*keycode)[3];
+    bool keycode[3][KEY_COUNT];
     int size;
     bool exitRequested;
 } Input;

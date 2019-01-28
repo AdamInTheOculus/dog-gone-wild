@@ -62,6 +62,7 @@ AnimatedSprite createAnimatedSprite(
         updateSprite
     );
 
+    as.facingLeft = false;
     as.visible = true;
     as.frameIndex = 0;
     as.timeToUpdate = timeToUpdate;
@@ -204,7 +205,6 @@ void updateAnimatedSprite(AnimatedSprite* sprite, int elapsedTime)
     // == Update last animation ==
     // ===========================
     strcpy(sprite->lastAnimation, sprite->currentAnimation);
-    log_debug("Last animation: %s\n", sprite->lastAnimation);
 
     // ========================================
     // == Update Sprite and time that passed ==
